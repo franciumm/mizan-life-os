@@ -1,0 +1,103 @@
+- generic [ref=e2]:
+  - complementary [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]: M
+      - generic [ref=e7]:
+        - strong [ref=e8]: Mizan
+        - generic [ref=e9]: Life operating system
+    - navigation "Main navigation" [ref=e10]:
+      - paragraph [ref=e11]: Your system
+      - button "Today 2" [ref=e336] [cursor=pointer]:
+        - generic [ref=e16]: Today
+        - generic [ref=e17]: "2"
+      - button "Goals" [ref=e18] [cursor=pointer]
+      - button "Insights" [ref=e24] [cursor=pointer]
+      - button "Coach" [ref=e28] [cursor=pointer]
+      - button "Life map" [active] [ref=e32] [cursor=pointer]
+    - generic [ref=e37]:
+      - generic [ref=e38]:
+        - generic [ref=e39]:
+          - generic [ref=e40]: Overall rank
+          - strong [ref=e41]: Lv. 18
+        - paragraph [ref=e44]: Momentum · 320 XP to Disciplined
+      - button "M Mohamed Private workspace" [ref=e45] [cursor=pointer]:
+        - generic [ref=e46]: M
+        - generic [ref=e47]:
+          - strong [ref=e48]: Mohamed
+          - generic [ref=e49]: Private workspace
+  - main [ref=e52]:
+    - generic [ref=e53]:
+      - generic [ref=e54]:
+        - generic [ref=e55]: Wednesday
+        - strong [ref=e56]: August 5
+      - generic "Day mode" [ref=e57]:
+        - button "Grinding" [ref=e58] [cursor=pointer]
+        - button "Recovery" [ref=e59] [cursor=pointer]
+        - button "Vacation" [ref=e60] [cursor=pointer]
+      - button "Tomorrow planned" [ref=e515] [cursor=pointer]
+    - generic [ref=e787]:
+      - generic [ref=e788]:
+        - generic [ref=e789]:
+          - paragraph [ref=e790]: Nothing important disappears
+          - heading "Life map" [level=1] [ref=e791]
+          - paragraph [ref=e792]: Every area has a status, a direction, and a next honest action.
+        - generic [ref=e793]:
+          - generic [ref=e794]: Balance
+          - strong [ref=e795]: "68"
+      - generic [ref=e796]:
+        - generic [ref=e797]:
+          - generic [ref=e798]:
+            - generic [ref=e802]:
+              - generic [ref=e803]: Faith
+              - strong [ref=e804]: Momentum
+            - generic [ref=e805]: "82"
+          - paragraph [ref=e808]: Prayer is stable. Protect Fajr and add the Quran dose.
+          - generic [ref=e809]: +5% this week
+        - generic [ref=e813]:
+          - generic [ref=e814]:
+            - generic [ref=e818]:
+              - generic [ref=e819]: Health
+              - strong [ref=e820]: Rebuilding
+            - generic [ref=e821]: "61"
+          - paragraph [ref=e824]: Running returned. Rehabilitation remains the priority.
+          - generic [ref=e825]: +3% this week
+        - generic [ref=e829]:
+          - generic [ref=e830]:
+            - generic [ref=e835]:
+              - generic [ref=e836]: Business
+              - strong [ref=e837]: Operator
+            - generic [ref=e838]: "73"
+          - paragraph [ref=e841]: Strong output, but real-user validation is still the bottleneck.
+          - generic [ref=e842]: +8% this week
+        - generic [ref=e846]:
+          - generic [ref=e847]:
+            - generic [ref=e851]:
+              - generic [ref=e852]: College
+              - strong [ref=e853]: Steady
+            - generic [ref=e854]: "68"
+          - paragraph [ref=e857]: Stable now. Exam preparation needs a weekly structure.
+          - generic [ref=e858]: "-2% this week"
+        - generic [ref=e862]:
+          - generic [ref=e863]:
+            - generic [ref=e868]:
+              - generic [ref=e869]: Mind
+              - strong [ref=e870]: Foundation
+            - generic [ref=e871]: "57"
+          - paragraph [ref=e874]: Japanese and random learning need protected time, not leftovers.
+          - generic [ref=e875]: +6% this week
+        - generic [ref=e879]:
+          - generic [ref=e880]:
+            - generic [ref=e885]:
+              - generic [ref=e886]: Family
+              - strong [ref=e887]: Present
+            - generic [ref=e888]: "76"
+          - paragraph [ref=e891]: Present enough to recover, but family time is still under-tracked.
+          - generic [ref=e892]: +1% this week
+        - generic [ref=e896]:
+          - generic [ref=e897]:
+            - generic [ref=e901]:
+              - generic [ref=e902]: Personality
+              - strong [ref=e903]: Courage I
+            - generic [ref=e904]: "46"
+          - paragraph [ref=e907]: Confidence is growing fastest. Complete three courage reps this week.
+          - generic [ref=e908]: +9% this week

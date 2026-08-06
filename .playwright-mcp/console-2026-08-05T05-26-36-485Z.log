@@ -1,0 +1,14 @@
+[     646ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=166cba3b:14337
+[  825328ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:3002/@vite/client:968
+[  825505ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=166cba3b:14337
+[ 1665584ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:3002/@vite/client:968
+[ 1665799ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=166cba3b:14337
+[ 1677838ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:3002/@vite/client:968
+[ 1677952ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=166cba3b:14337
+[ 4352476ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:3002/@vite/client:968
+[ 4352619ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=166cba3b:14337
+[ 6884639ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:3002/@vite/client:968
+[ 6884806ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=166cba3b:14337
+[25137343ms] [ERROR] Failed to load resource: the server responded with a status of 503 (Service Unavailable) @ http://localhost:3002/api/coach:0
+[26712483ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:3002/@vite/client:968
+[26712565ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=166cba3b:14337

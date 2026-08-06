@@ -1,0 +1,59 @@
+- generic [ref=e2]:
+  - complementary [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]: M
+      - generic [ref=e7]:
+        - strong [ref=e8]: Mizan
+        - generic [ref=e9]: Life operating system
+    - navigation "Main navigation" [ref=e10]:
+      - paragraph [ref=e11]: Your system
+      - button "Today 3" [ref=e12] [cursor=pointer]:
+        - generic [ref=e16]: Today
+        - generic [ref=e17]: "3"
+      - button "Goals" [ref=e18] [cursor=pointer]
+      - button "Insights" [ref=e24] [cursor=pointer]
+      - button "Coach" [active] [ref=e28] [cursor=pointer]
+      - button "Life map" [ref=e32] [cursor=pointer]
+    - generic [ref=e37]:
+      - generic [ref=e38]:
+        - generic [ref=e39]:
+          - generic [ref=e40]: Overall rank
+          - strong [ref=e41]: Lv. 18
+        - paragraph [ref=e44]: Momentum · 320 XP to Disciplined
+      - button "M Mohamed Private workspace" [ref=e45] [cursor=pointer]:
+        - generic [ref=e46]: M
+        - generic [ref=e47]:
+          - strong [ref=e48]: Mohamed
+          - generic [ref=e49]: Private workspace
+  - main [ref=e52]:
+    - generic [ref=e53]:
+      - generic [ref=e54]:
+        - generic [ref=e55]: Wednesday
+        - strong [ref=e56]: August 5
+      - generic "Day mode" [ref=e57]:
+        - button "Grinding" [ref=e58] [cursor=pointer]
+        - button "Recovery" [ref=e59] [cursor=pointer]
+        - button "Vacation" [ref=e60] [cursor=pointer]
+      - button "Plan tomorrow" [ref=e61] [cursor=pointer]
+    - generic [ref=e398]:
+      - generic [ref=e399]:
+        - generic [ref=e400]:
+          - paragraph [ref=e401]: Your context, remembered
+          - heading "Mizan Coach" [level=1] [ref=e402]
+          - paragraph [ref=e403]: Strategic when planning. Firm when avoiding. Calm when recovering.
+        - generic [ref=e404]: Private conversation
+      - generic [ref=e406]:
+        - generic [ref=e407]:
+          - heading "I know what you are balancing." [level=2] [ref=e411]
+          - paragraph [ref=e412]: HustleIQ launch, agency revenue, rehabilitation, college, faith, learning, and the need to actually enjoy your life.
+          - generic [ref=e413]:
+            - generic [ref=e414]: HustleIQ is at validation
+            - generic [ref=e418]: Adductor rehab is improving
+            - generic [ref=e421]: Prayer anchors the day
+        - generic [ref=e424]:
+          - paragraph [ref=e430]: Assalamu alaykum. Your health is improving, but uncertainty is stealing more energy than the work itself. What is on your mind?
+          - generic [ref=e431]:
+            - textbox "Talk through your plans, uncertainty, pain, or priorities…" [ref=e432]
+            - generic [ref=e433]:
+              - button "Voice note" [ref=e434] [cursor=pointer]
+              - button "Send message" [ref=e438] [cursor=pointer]

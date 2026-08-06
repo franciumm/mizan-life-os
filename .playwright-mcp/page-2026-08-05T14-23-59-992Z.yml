@@ -1,0 +1,61 @@
+- generic [ref=f7e2]:
+  - main [ref=f7e3]:
+    - generic [ref=f7e4]:
+      - button "Open menu" [ref=f7e5] [cursor=pointer]
+      - generic [ref=f7e8]:
+        - generic [ref=f7e9]: Wednesday
+        - strong [ref=f7e10]: August 5
+      - button "Plan tomorrow" [ref=f7e11] [cursor=pointer]
+    - generic [ref=f7e309]:
+      - generic [ref=f7e310]:
+        - generic [ref=f7e311]:
+          - paragraph [ref=f7e312]: Calm, factual feedback
+          - heading "Insights" [level=1] [ref=f7e313]
+          - paragraph [ref=f7e314]: Your behavior is data, not a verdict.
+        - generic [ref=f7e315]: 12 days current streak
+      - generic [ref=f7e319]:
+        - generic [ref=f7e320]:
+          - generic [ref=f7e321]:
+            - generic [ref=f7e322]:
+              - paragraph [ref=f7e323]: Against your best week
+              - heading "Consistency score" [level=2] [ref=f7e324]
+            - strong [ref=f7e325]: 48/100
+          - generic [ref=f7e326]:
+            - generic [ref=f7e327]: Th
+            - generic [ref=f7e331]: Fr
+            - generic [ref=f7e335]: Sa
+            - generic [ref=f7e339]: Su
+            - generic [ref=f7e343]: Mo
+            - generic [ref=f7e347]: Tu
+            - generic [ref=f7e351]: We
+          - generic [ref=f7e355]:
+            - generic [ref=f7e356]: This week
+            - generic [ref=f7e358]: Best previous week
+        - generic [ref=f7e360]:
+          - paragraph [ref=f7e361]: What the pattern says
+          - heading "Patterns forming" [level=2] [ref=f7e362]
+          - paragraph [ref=f7e363]: Mizan couldn't reach the analysis engine this time. Your day is still tracked; insights will refresh on the next call.
+          - status [ref=f7e364]: Analysis engine offline — commentary above is a fallback. It will refresh on the next call.
+      - generic [ref=f7e365]:
+        - generic [ref=f7e366]:
+          - generic [ref=f7e367]: Focus record
+          - strong [ref=f7e368]: 6h 42m
+          - generic [ref=f7e369]: Jul 29 · HustleIQ
+        - generic [ref=f7e370]:
+          - generic [ref=f7e371]: Best balanced day
+          - strong [ref=f7e372]: "86"
+          - generic [ref=f7e373]: Faith · health · business
+        - generic [ref=f7e374]:
+          - generic [ref=f7e375]: Personality reps
+          - strong [ref=f7e376]: "7"
+          - generic [ref=f7e377]: Personal record this month
+        - generic [ref=f7e378]:
+          - generic [ref=f7e379]: Doomscroll-free
+          - strong [ref=f7e380]: 5 days
+          - generic [ref=f7e381]: "Best: 11 days"
+  - navigation "Mobile navigation" [ref=f7e272]:
+    - button "Today" [ref=f7e273] [cursor=pointer]
+    - button "Goals" [ref=f7e278] [cursor=pointer]
+    - button "Insights" [active] [ref=f7e284] [cursor=pointer]
+    - button "Coach" [ref=f7e288] [cursor=pointer]
+    - button "Life" [ref=f7e292] [cursor=pointer]

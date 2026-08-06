@@ -1,0 +1,84 @@
+- generic [ref=f5e2]:
+  - complementary [ref=f5e3]:
+    - generic [ref=f5e4]:
+      - generic [ref=f5e5]: M
+      - generic [ref=f5e7]:
+        - strong [ref=f5e8]: Mizan
+        - generic [ref=f5e9]: Life operating system
+    - navigation "Main navigation" [ref=f5e10]:
+      - paragraph [ref=f5e11]: Your system
+      - button "Today 3" [ref=f5e12] [cursor=pointer]:
+        - generic [ref=f5e16]: Today
+        - generic [ref=f5e17]: "3"
+      - button "Goals" [ref=f5e18] [cursor=pointer]
+      - button "Insights" [active] [ref=f5e24] [cursor=pointer]
+      - button "Coach" [ref=f5e28] [cursor=pointer]
+      - button "Life map" [ref=f5e32] [cursor=pointer]
+    - generic [ref=f5e37]:
+      - generic [ref=f5e38]:
+        - generic [ref=f5e39]:
+          - generic [ref=f5e40]: Overall rank
+          - strong [ref=f5e41]: Lv. 18
+        - paragraph [ref=f5e44]: Momentum · 320 XP to Disciplined
+      - button "M Mohamed Private workspace" [ref=f5e45] [cursor=pointer]:
+        - generic [ref=f5e46]: M
+        - generic [ref=f5e47]:
+          - strong [ref=f5e48]: Mohamed
+          - generic [ref=f5e49]: Private workspace
+  - main [ref=f5e52]:
+    - generic [ref=f5e53]:
+      - generic [ref=f5e54]:
+        - generic [ref=f5e55]: Wednesday
+        - strong [ref=f5e56]: August 5
+      - generic "Day mode" [ref=f5e57]:
+        - button "Grinding" [ref=f5e58] [cursor=pointer]
+        - button "Recovery" [ref=f5e59] [cursor=pointer]
+        - button "Vacation" [ref=f5e60] [cursor=pointer]
+      - button "Plan tomorrow" [ref=f5e61] [cursor=pointer]
+    - generic [ref=f5e387]:
+      - generic [ref=f5e388]:
+        - generic [ref=f5e389]:
+          - paragraph [ref=f5e390]: Calm, factual feedback
+          - heading "Insights" [level=1] [ref=f5e391]
+          - paragraph [ref=f5e392]: Your behavior is data, not a verdict.
+        - generic [ref=f5e393]: 12 days current streak
+      - generic [ref=f5e397]:
+        - generic [ref=f5e398]:
+          - generic [ref=f5e399]:
+            - generic [ref=f5e400]:
+              - paragraph [ref=f5e401]: Against your best week
+              - heading "Consistency score" [level=2] [ref=f5e402]
+            - strong [ref=f5e403]: 14/100
+          - generic [ref=f5e404]:
+            - generic [ref=f5e405]: Th
+            - generic [ref=f5e409]: Fr
+            - generic [ref=f5e413]: Sa
+            - generic [ref=f5e417]: Su
+            - generic [ref=f5e421]: Mo
+            - generic [ref=f5e425]: Tu
+            - generic [ref=f5e429]: We
+          - generic [ref=f5e433]:
+            - generic [ref=f5e434]: This week
+            - generic [ref=f5e436]: Best previous week
+        - generic [ref=f5e438]:
+          - paragraph [ref=f5e439]: What the pattern says
+          - heading "Patterns forming" [level=2] [ref=f5e440]
+          - paragraph [ref=f5e441]: Mizan couldn't reach the analysis engine this time. Your day is still tracked; insights will refresh on the next call.
+          - status [ref=f5e442]: Analysis engine offline — commentary above is a fallback. It will refresh on the next call.
+      - generic [ref=f5e443]:
+        - generic [ref=f5e444]:
+          - generic [ref=f5e445]: Focus record
+          - strong [ref=f5e446]: 6h 42m
+          - generic [ref=f5e447]: Jul 29 · HustleIQ
+        - generic [ref=f5e448]:
+          - generic [ref=f5e449]: Best balanced day
+          - strong [ref=f5e450]: "86"
+          - generic [ref=f5e451]: Faith · health · business
+        - generic [ref=f5e452]:
+          - generic [ref=f5e453]: Personality reps
+          - strong [ref=f5e454]: "7"
+          - generic [ref=f5e455]: Personal record this month
+        - generic [ref=f5e456]:
+          - generic [ref=f5e457]: Doomscroll-free
+          - strong [ref=f5e458]: 5 days
+          - generic [ref=f5e459]: "Best: 11 days"

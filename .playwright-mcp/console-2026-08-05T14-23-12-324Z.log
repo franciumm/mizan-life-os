@@ -1,0 +1,38 @@
+[     151ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=166cba3b:14337
+[   82274ms] [ERROR] Failed to load resource: the server responded with a status of 503 (Service Unavailable) @ http://localhost:3002/api/coach:0
+[  697857ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3002/app/MizanDashboard.tsx?t=1785940490159:0
+[  697857ms] [ERROR] [vite] Failed to reload /app/MizanDashboard.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:3002/@vite/client:509
+[  715117ms] [ERROR] ReferenceError: useRef is not defined
+    at MizanDashboard (http://localhost:3002/app/MizanDashboard.tsx?t=1785940507358:634:24)
+    at Object.react_stack_bottom_frame (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=166cba3b:12868:12)
+    at renderWithHooks (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=166cba3b:4213:19)
+    at updateFunctionComponent (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=166cba3b:5569:16)
+    at beginWork (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=166cba3b:6140:20)
+    at runWithFiberInDEV (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=166cba3b:851:66)
+    at performUnitOfWork (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=166cba3b:8429:92)
+    at workLoopSync (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=166cba3b:8325:37)
+    at renderRootSync (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=166cba3b:8309:6)
+    at performWorkOnRoot (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=166cba3b:7994:27) @ http://localhost:3002/@vite/client:509
+[  715119ms] [ERROR] The above error occurred in a React component:
+
+    at MizanDashboard (http://localhost:3002/app/MizanDashboard.tsx?t=1785940507358:583:26)
+    at Home [Server] (<anonymous>)
+    at AwaitAppRenderDependencies [Server] (<anonymous>)
+    at Slot (http://localhost:3002/node_modules/vinext/dist/shims/slot.js?v=166cba3b:42:17)
+    at LayoutSegmentProvider (http://localhost:3002/node_modules/vinext/dist/shims/layout-segment-context.js?v=166cba3b:32:34)
+    at RedirectErrorBoundary (http://localhost:3002/node_modules/vinext/dist/shims/error-boundary.js?v=166cba3b:56:3)
+    at RedirectBoundary (http://localhost:3002/node_modules/vinext/dist/shims/error-boundary.js?v=166cba3b:86:29)
+    at Children (http://localhost:3002/node_modules/vinext/dist/shims/slot.js?v=166cba3b:64:17)
+    at body (<anonymous>)
+    at html (<anonymous>)
+    at RootLayout [Server] (<anonymous>)
+    at default (about://React/Server/file:///Users/francium/Documents/Codex/2026-08-05/sites-plugin-sites-openai-bundled-create/app/layout.tsx?1:64:26)
+    at default (about://React/Server/file:///Users/francium/Documents/Codex/2026-08-05/sites-plugin-sites-openai-bundled-create/app/layout.tsx?1:64:26)
+    at Slot (http://localhost:3002/node_modules/vinext/dist/shims/slot.js?v=166cba3b:42:17)
+    at LayoutSegmentProvider (http://localhost:3002/node_modules/vinext/dist/shims/layout-segment-context.js?v=166cba3b:32:34)
+    at Slot (http://localhost:3002/node_modules/vinext/dist/shims/slot.js?v=166cba3b:42:17)
+    at NavigationCommitSignal (http://localhost:3002/node_modules/vinext/dist/server/app-browser-navigation-controller.js?v=166cba3b:184:36)
+    at RedirectErrorBoundary (http://localhost:3002/node_modules/vinext/dist/shims/error-boundary.js?v=166cba3b:56:3)
+    at RedirectBoundary (http://localhost:3002/node_modules/vinext/dist/shims/error-boundary.js?v=166cba3b:86:29)
+    at DevRecoveryBoundary (http://localhost:3002/node_modules/vinext/dist/shims/error-boundary.js?v=166cba3b:268:3)
+    at BrowserRoot (http://localhost:3002/node_modules/vinext/dist/server/app-browser-entry.js?v=166cba3b:209:24) @ http://localhost:3002/@vite/client:509

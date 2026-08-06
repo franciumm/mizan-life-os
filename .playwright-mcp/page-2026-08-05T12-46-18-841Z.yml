@@ -1,0 +1,99 @@
+- generic [ref=f5e2]:
+  - complementary [ref=f5e3]:
+    - generic [ref=f5e4]:
+      - generic [ref=f5e5]: M
+      - generic [ref=f5e7]:
+        - strong [ref=f5e8]: Mizan
+        - generic [ref=f5e9]: Life operating system
+    - navigation "Main navigation" [ref=f5e10]:
+      - paragraph [ref=f5e11]: Your system
+      - button "Today 3" [ref=f5e12] [cursor=pointer]:
+        - generic [ref=f5e16]: Today
+        - generic [ref=f5e17]: "3"
+      - button "Goals" [ref=f5e18] [cursor=pointer]
+      - button "Insights" [ref=f5e24] [cursor=pointer]
+      - button "Coach" [ref=f5e28] [cursor=pointer]
+      - button "Life map" [active] [ref=f5e32] [cursor=pointer]
+    - generic [ref=f5e37]:
+      - generic [ref=f5e38]:
+        - generic [ref=f5e39]:
+          - generic [ref=f5e40]: Overall rank
+          - strong [ref=f5e41]: Lv. 18
+        - paragraph [ref=f5e44]: Momentum · 320 XP to Disciplined
+      - button "M Mohamed Private workspace" [ref=f5e45] [cursor=pointer]:
+        - generic [ref=f5e46]: M
+        - generic [ref=f5e47]:
+          - strong [ref=f5e48]: Mohamed
+          - generic [ref=f5e49]: Private workspace
+  - main [ref=f5e52]:
+    - generic [ref=f5e53]:
+      - generic [ref=f5e54]:
+        - generic [ref=f5e55]: Wednesday
+        - strong [ref=f5e56]: August 5
+      - generic "Day mode" [ref=f5e57]:
+        - button "Grinding" [ref=f5e58] [cursor=pointer]
+        - button "Recovery" [ref=f5e59] [cursor=pointer]
+        - button "Vacation" [ref=f5e60] [cursor=pointer]
+      - button "Plan tomorrow" [ref=f5e61] [cursor=pointer]
+    - generic [ref=f5e460]:
+      - generic [ref=f5e462]:
+        - paragraph [ref=f5e463]: Nothing important disappears
+        - heading "Life map" [level=1] [ref=f5e464]
+        - paragraph [ref=f5e465]: Every area has a status, a direction, and a next honest action.
+      - generic [ref=f5e466]:
+        - generic [ref=f5e467]:
+          - generic [ref=f5e468]:
+            - generic [ref=f5e472]:
+              - generic [ref=f5e473]: Faith
+              - strong [ref=f5e474]: Momentum
+            - generic [ref=f5e475]: "82"
+          - paragraph [ref=f5e478]: 82 (+5% this week, Momentum). Insight engine offline — refresh later.
+          - generic [ref=f5e479]: +5% this week
+        - generic [ref=f5e483]:
+          - generic [ref=f5e484]:
+            - generic [ref=f5e488]:
+              - generic [ref=f5e489]: Health
+              - strong [ref=f5e490]: Rebuilding
+            - generic [ref=f5e491]: "61"
+          - paragraph [ref=f5e494]: 61 (+3% this week, Rebuilding). Insight engine offline — refresh later.
+          - generic [ref=f5e495]: +3% this week
+        - generic [ref=f5e499]:
+          - generic [ref=f5e500]:
+            - generic [ref=f5e505]:
+              - generic [ref=f5e506]: Business
+              - strong [ref=f5e507]: Operator
+            - generic [ref=f5e508]: "73"
+          - paragraph [ref=f5e511]: 73 (+8% this week, Operator). Insight engine offline — refresh later.
+          - generic [ref=f5e512]: +8% this week
+        - generic [ref=f5e516]:
+          - generic [ref=f5e517]:
+            - generic [ref=f5e521]:
+              - generic [ref=f5e522]: College
+              - strong [ref=f5e523]: Steady
+            - generic [ref=f5e524]: "68"
+          - paragraph [ref=f5e527]: 68 (-2% this week, Steady). Insight engine offline — refresh later.
+          - generic [ref=f5e528]: "-2% this week"
+        - generic [ref=f5e532]:
+          - generic [ref=f5e533]:
+            - generic [ref=f5e538]:
+              - generic [ref=f5e539]: Mind
+              - strong [ref=f5e540]: Foundation
+            - generic [ref=f5e541]: "57"
+          - paragraph [ref=f5e544]: 57 (+6% this week, Foundation). Insight engine offline — refresh later.
+          - generic [ref=f5e545]: +6% this week
+        - generic [ref=f5e549]:
+          - generic [ref=f5e550]:
+            - generic [ref=f5e555]:
+              - generic [ref=f5e556]: Family
+              - strong [ref=f5e557]: Present
+            - generic [ref=f5e558]: "76"
+          - paragraph [ref=f5e561]: 76 (+1% this week, Present). Insight engine offline — refresh later.
+          - generic [ref=f5e562]: +1% this week
+        - generic [ref=f5e566]:
+          - generic [ref=f5e567]:
+            - generic [ref=f5e571]:
+              - generic [ref=f5e572]: Personality
+              - strong [ref=f5e573]: Courage I
+            - generic [ref=f5e574]: "46"
+          - paragraph [ref=f5e577]: 46 (+9% this week, Courage I). Insight engine offline — refresh later.
+          - generic [ref=f5e578]: +9% this week

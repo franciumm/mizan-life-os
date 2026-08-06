@@ -1,0 +1,76 @@
+- generic [ref=f7e2]:
+  - main [ref=f7e3]:
+    - generic [ref=f7e4]:
+      - button "Open menu" [ref=f7e5] [cursor=pointer]
+      - generic [ref=f7e8]:
+        - generic [ref=f7e9]: Wednesday
+        - strong [ref=f7e10]: August 5
+      - button "Plan tomorrow" [ref=f7e11] [cursor=pointer]
+    - generic [ref=f7e433]:
+      - generic [ref=f7e435]:
+        - paragraph [ref=f7e436]: Nothing important disappears
+        - heading "Life map" [level=1] [ref=f7e437]
+        - paragraph [ref=f7e438]: Every area has a status, a direction, and a next honest action.
+      - generic [ref=f7e439]:
+        - generic [ref=f7e440]:
+          - generic [ref=f7e441]:
+            - generic [ref=f7e445]:
+              - generic [ref=f7e446]: Faith
+              - strong [ref=f7e447]: Momentum
+            - generic [ref=f7e448]: "82"
+          - paragraph [ref=f7e451]: 82 (+5% this week, Momentum). Insight engine offline — refresh later.
+          - generic [ref=f7e452]: +5% this week
+        - generic [ref=f7e456]:
+          - generic [ref=f7e457]:
+            - generic [ref=f7e461]:
+              - generic [ref=f7e462]: Health
+              - strong [ref=f7e463]: Rebuilding
+            - generic [ref=f7e464]: "61"
+          - paragraph [ref=f7e467]: 61 (+3% this week, Rebuilding). Insight engine offline — refresh later.
+          - generic [ref=f7e468]: +3% this week
+        - generic [ref=f7e472]:
+          - generic [ref=f7e473]:
+            - generic [ref=f7e478]:
+              - generic [ref=f7e479]: Business
+              - strong [ref=f7e480]: Operator
+            - generic [ref=f7e481]: "73"
+          - paragraph [ref=f7e484]: 73 (+8% this week, Operator). Insight engine offline — refresh later.
+          - generic [ref=f7e485]: +8% this week
+        - generic [ref=f7e489]:
+          - generic [ref=f7e490]:
+            - generic [ref=f7e494]:
+              - generic [ref=f7e495]: College
+              - strong [ref=f7e496]: Steady
+            - generic [ref=f7e497]: "68"
+          - paragraph [ref=f7e500]: 68 (-2% this week, Steady). Insight engine offline — refresh later.
+          - generic [ref=f7e501]: "-2% this week"
+        - generic [ref=f7e505]:
+          - generic [ref=f7e506]:
+            - generic [ref=f7e511]:
+              - generic [ref=f7e512]: Mind
+              - strong [ref=f7e513]: Foundation
+            - generic [ref=f7e514]: "57"
+          - paragraph [ref=f7e517]: 57 (+6% this week, Foundation). Insight engine offline — refresh later.
+          - generic [ref=f7e518]: +6% this week
+        - generic [ref=f7e522]:
+          - generic [ref=f7e523]:
+            - generic [ref=f7e528]:
+              - generic [ref=f7e529]: Family
+              - strong [ref=f7e530]: Present
+            - generic [ref=f7e531]: "76"
+          - paragraph [ref=f7e534]: 76 (+1% this week, Present). Insight engine offline — refresh later.
+          - generic [ref=f7e535]: +1% this week
+        - generic [ref=f7e539]:
+          - generic [ref=f7e540]:
+            - generic [ref=f7e544]:
+              - generic [ref=f7e545]: Personality
+              - strong [ref=f7e546]: Courage I
+            - generic [ref=f7e547]: "46"
+          - paragraph [ref=f7e550]: 46 (+9% this week, Courage I). Insight engine offline — refresh later.
+          - generic [ref=f7e551]: +9% this week
+  - navigation "Mobile navigation" [ref=f7e272]:
+    - button "Today" [ref=f7e273] [cursor=pointer]
+    - button "Goals" [ref=f7e278] [cursor=pointer]
+    - button "Insights" [ref=f7e284] [cursor=pointer]
+    - button "Coach" [ref=f7e288] [cursor=pointer]
+    - button "Life" [active] [ref=f7e292] [cursor=pointer]

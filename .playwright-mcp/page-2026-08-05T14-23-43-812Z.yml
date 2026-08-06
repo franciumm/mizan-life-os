@@ -1,0 +1,195 @@
+- generic [ref=f7e2]:
+  - main [ref=f7e3]:
+    - generic [ref=f7e4]:
+      - button "Open menu" [ref=f7e5] [cursor=pointer]
+      - generic [ref=f7e8]:
+        - generic [ref=f7e9]: Wednesday
+        - strong [ref=f7e10]: August 5
+      - button "Plan tomorrow" [ref=f7e11] [cursor=pointer]
+    - generic [ref=f7e14]:
+      - generic [ref=f7e15]:
+        - generic [ref=f7e16]:
+          - paragraph [ref=f7e17]: Assalamu alaykum, Mohamed
+          - heading "Recover without losing yourself." [level=1] [ref=f7e302]
+          - generic "Today’s momentum" [ref=f7e19]:
+            - generic [ref=f7e20]:
+              - generic [ref=f7e23]: 12-day
+              - text: momentum
+            - generic [ref=f7e24]:
+              - generic [ref=f7e29]: 2/2
+              - text: missions moved
+        - generic "Day power 48 out of 100" [ref=f7e297]:
+          - strong [ref=f7e32]: "48"
+      - generic "Day mode" [ref=f7e33]:
+        - button "Grinding" [ref=f7e34] [cursor=pointer]
+        - button "Recovery" [active] [ref=f7e35] [cursor=pointer]
+        - button "Vacation" [ref=f7e36] [cursor=pointer]
+      - region [ref=f7e37]:
+        - generic [ref=f7e38]:
+          - generic [ref=f7e39]:
+            - paragraph [ref=f7e40]: Current status
+            - heading "Your life pulse" [level=2] [ref=f7e41]
+          - button "Full life map" [ref=f7e42] [cursor=pointer]
+        - generic [ref=f7e45]:
+          - button "Faith +5% 82 Momentum" [ref=f7e46] [cursor=pointer]:
+            - generic [ref=f7e47]:
+              - generic [ref=f7e48]: Faith
+              - generic [ref=f7e49]: +5%
+            - strong [ref=f7e50]: "82"
+            - paragraph [ref=f7e53]: Momentum
+          - button "Health +3% 61 Rebuilding" [ref=f7e54] [cursor=pointer]:
+            - generic [ref=f7e55]:
+              - generic [ref=f7e56]: Health
+              - generic [ref=f7e57]: +3%
+            - strong [ref=f7e58]: "61"
+            - paragraph [ref=f7e61]: Rebuilding
+          - button "Business +8% 73 Operator" [ref=f7e62] [cursor=pointer]:
+            - generic [ref=f7e63]:
+              - generic [ref=f7e64]: Business
+              - generic [ref=f7e65]: +8%
+            - strong [ref=f7e66]: "73"
+            - paragraph [ref=f7e69]: Operator
+          - button "College -2% 68 Steady" [ref=f7e70] [cursor=pointer]:
+            - generic [ref=f7e71]:
+              - generic [ref=f7e72]: College
+              - generic [ref=f7e73]: "-2%"
+            - strong [ref=f7e74]: "68"
+            - paragraph [ref=f7e77]: Steady
+          - button "Mind +6% 57 Foundation" [ref=f7e78] [cursor=pointer]:
+            - generic [ref=f7e79]:
+              - generic [ref=f7e80]: Mind
+              - generic [ref=f7e81]: +6%
+            - strong [ref=f7e82]: "57"
+            - paragraph [ref=f7e85]: Foundation
+          - button "Family +1% 76 Present" [ref=f7e86] [cursor=pointer]:
+            - generic [ref=f7e87]:
+              - generic [ref=f7e88]: Family
+              - generic [ref=f7e89]: +1%
+            - strong [ref=f7e90]: "76"
+            - paragraph [ref=f7e93]: Present
+          - button "Personality +9% 46 Courage I" [ref=f7e94] [cursor=pointer]:
+            - generic [ref=f7e95]:
+              - generic [ref=f7e96]: Personality
+              - generic [ref=f7e97]: +9%
+            - strong [ref=f7e98]: "46"
+            - paragraph [ref=f7e101]: Courage I
+      - generic [ref=f7e102]:
+        - region [ref=f7e303]:
+          - generic [ref=f7e105]:
+            - paragraph [ref=f7e106]: Today’s direction
+            - heading "Minimum viable day" [level=2] [ref=f7e304]
+          - generic [ref=f7e108]:
+            - paragraph [ref=f7e112]:
+              - generic [ref=f7e113]: 88%
+              - text: of today’s protected focus complete
+            - button "Start next mission" [ref=f7e114] [cursor=pointer]
+          - generic [ref=f7e119]:
+            - generic [ref=f7e142]:
+              - button "Reopen Complete adductor rehabilitation session" [ref=f7e143] [cursor=pointer]
+              - generic [ref=f7e146]:
+                - generic [ref=f7e147]: Health
+                - heading "Complete adductor rehabilitation session" [level=3] [ref=f7e149]
+                - paragraph [ref=f7e150]: 13:45–14:45 · 60 min
+            - generic [ref=f7e120]:
+              - button "Reopen Run a HustleIQ beta test with 3 real users" [ref=f7e298] [cursor=pointer]
+              - generic [ref=f7e122]:
+                - generic [ref=f7e123]:
+                  - generic [ref=f7e125]: Business
+                  - generic [ref=f7e126]: Rolled 1/4
+                - heading "Run a HustleIQ beta test with 3 real users" [level=3] [ref=f7e127]
+                - paragraph [ref=f7e128]: 10:30–13:00 · 150 min
+          - generic [ref=f7e165]:
+            - button "I’m stuck" [ref=f7e166] [cursor=pointer]
+            - button "Arrange tasks" [ref=f7e169] [cursor=pointer]
+        - complementary [ref=f7e172]:
+          - generic [ref=f7e173]:
+            - generic [ref=f7e174]:
+              - generic [ref=f7e175]:
+                - paragraph [ref=f7e176]: Cairo · Today
+                - heading "Prayer rhythm" [level=2] [ref=f7e177]
+              - generic [ref=f7e178]: 0/5
+            - generic [ref=f7e179]:
+              - button [ref=f7e180] [cursor=pointer]:
+                - strong [ref=f7e182]: Fajr
+                - time [ref=f7e183]: 4:39
+              - button [ref=f7e184] [cursor=pointer]:
+                - strong [ref=f7e186]: Dhuhr
+                - time [ref=f7e187]: 1:02
+              - button [ref=f7e188] [cursor=pointer]:
+                - strong [ref=f7e190]: Asr
+                - time [ref=f7e191]: 4:38
+              - button [ref=f7e192] [cursor=pointer]:
+                - strong [ref=f7e194]: Maghrib
+                - time [ref=f7e195]: 7:49
+              - button [ref=f7e196] [cursor=pointer]:
+                - strong [ref=f7e198]: Isha
+                - time [ref=f7e199]: 9:13
+            - button "Daily Quran 10 minutes · after Maghrib" [ref=f7e200] [cursor=pointer]:
+              - generic [ref=f7e203]:
+                - strong [ref=f7e204]: Daily Quran
+                - generic [ref=f7e205]: 10 minutes · after Maghrib
+          - generic [ref=f7e208]:
+            - generic [ref=f7e209]:
+              - generic [ref=f7e210]:
+                - paragraph [ref=f7e211]: Personality grind · 1/3
+                - heading "Courage rep" [level=2] [ref=f7e212]
+              - button "Draw another challenge" [ref=f7e213] [cursor=pointer]
+            - blockquote [ref=f7e216]: “Start a conversation at physiotherapy or college”
+            - generic [ref=f7e217]:
+              - button "Mark complete" [ref=f7e218] [cursor=pointer]
+              - button "Draw another" [ref=f7e221] [cursor=pointer]
+      - generic [ref=f7e222]:
+        - generic [ref=f7e223]:
+          - paragraph [ref=f7e224]: The biggest goal
+          - heading "A life of wealth, strength and closeness to God." [level=2] [ref=f7e225]: A life of wealth, strengthand closeness to God.
+          - paragraph [ref=f7e226]: Build toward $1B+ without arriving empty. Protect faith, health, family and the mind capable of carrying it.
+          - button "See the path" [ref=f7e227] [cursor=pointer]
+        - generic [ref=f7e230]:
+          - generic [ref=f7e231]:
+            - generic [ref=f7e232]: "01"
+            - strong [ref=f7e233]: $1B+
+            - paragraph [ref=f7e234]: Build value at an extraordinary scale.
+          - generic [ref=f7e235]:
+            - generic [ref=f7e236]: "02"
+            - strong [ref=f7e237]: Strong body
+            - paragraph [ref=f7e238]: Healthy, capable and resilient.
+          - generic [ref=f7e239]:
+            - generic [ref=f7e240]: "03"
+            - strong [ref=f7e241]: Strong faith
+            - paragraph [ref=f7e242]: Prayer and purpose stay central.
+      - generic [ref=f7e243]:
+        - generic [ref=f7e244]:
+          - paragraph [ref=f7e245]: 30-second check-in
+          - heading "Give the system today’s context." [level=2] [ref=f7e246]
+        - generic [ref=f7e247]:
+          - generic [ref=f7e248]:
+            - generic [ref=f7e249]: energy
+            - generic [ref=f7e250]:
+              - button "energy 1 of 5" [ref=f7e251] [cursor=pointer]: "1"
+              - button "energy 2 of 5" [ref=f7e252] [cursor=pointer]: "2"
+              - button "energy 3 of 5" [ref=f7e253] [cursor=pointer]: "3"
+              - button "energy 4 of 5" [ref=f7e254] [cursor=pointer]: "4"
+              - button "energy 5 of 5" [ref=f7e255] [cursor=pointer]: "5"
+          - generic [ref=f7e256]:
+            - generic [ref=f7e257]: pain
+            - generic [ref=f7e258]:
+              - button "pain 1 of 5" [ref=f7e259] [cursor=pointer]: "1"
+              - button "pain 2 of 5" [ref=f7e260] [cursor=pointer]: "2"
+              - button "pain 3 of 5" [ref=f7e261] [cursor=pointer]: "3"
+              - button "pain 4 of 5" [ref=f7e262] [cursor=pointer]: "4"
+              - button "pain 5 of 5" [ref=f7e263] [cursor=pointer]: "5"
+          - generic [ref=f7e264]:
+            - generic [ref=f7e265]: focus
+            - generic [ref=f7e266]:
+              - button "focus 1 of 5" [ref=f7e267] [cursor=pointer]: "1"
+              - button "focus 2 of 5" [ref=f7e268] [cursor=pointer]: "2"
+              - button "focus 3 of 5" [ref=f7e269] [cursor=pointer]: "3"
+              - button "focus 4 of 5" [ref=f7e270] [cursor=pointer]: "4"
+              - button "focus 5 of 5" [ref=f7e271] [cursor=pointer]: "5"
+  - navigation "Mobile navigation" [ref=f7e272]:
+    - button "Today" [ref=f7e273] [cursor=pointer]
+    - button "Goals" [ref=f7e278] [cursor=pointer]
+    - button "Insights" [ref=f7e284] [cursor=pointer]
+    - button "Coach" [ref=f7e288] [cursor=pointer]
+    - button "Life" [ref=f7e292] [cursor=pointer]
+  - status [ref=f7e305]: Recovery Day active. Rehabilitation, prayer, rest, and one real task.

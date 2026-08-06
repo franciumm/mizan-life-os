@@ -1,0 +1,104 @@
+- generic [ref=e2]:
+  - complementary [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]: M
+      - generic [ref=e7]:
+        - strong [ref=e8]: Mizan
+        - generic [ref=e9]: Life operating system
+    - navigation "Main navigation" [ref=e10]:
+      - paragraph [ref=e11]: Your system
+      - button "Today 2" [ref=e336] [cursor=pointer]:
+        - generic [ref=e16]: Today
+        - generic [ref=e17]: "2"
+      - button "Goals" [active] [ref=e18] [cursor=pointer]
+      - button "Insights" [ref=e24] [cursor=pointer]
+      - button "Coach" [ref=e28] [cursor=pointer]
+      - button "Life map" [ref=e32] [cursor=pointer]
+    - generic [ref=e37]:
+      - generic [ref=e38]:
+        - generic [ref=e39]:
+          - generic [ref=e40]: Overall rank
+          - strong [ref=e41]: Lv. 18
+        - paragraph [ref=e44]: Momentum · 320 XP to Disciplined
+      - button "M Mohamed Private workspace" [ref=e45] [cursor=pointer]:
+        - generic [ref=e46]: M
+        - generic [ref=e47]:
+          - strong [ref=e48]: Mohamed
+          - generic [ref=e49]: Private workspace
+  - main [ref=e52]:
+    - generic [ref=e53]:
+      - generic [ref=e54]:
+        - generic [ref=e55]: Wednesday
+        - strong [ref=e56]: August 5
+      - generic "Day mode" [ref=e57]:
+        - button "Grinding" [ref=e58] [cursor=pointer]
+        - button "Recovery" [ref=e59] [cursor=pointer]
+        - button "Vacation" [ref=e60] [cursor=pointer]
+      - button "Tomorrow planned" [ref=e515] [cursor=pointer]
+    - generic [ref=e557]:
+      - generic [ref=e558]:
+        - generic [ref=e559]:
+          - paragraph [ref=e560]: Direction over distraction
+          - heading "Your goals" [level=1] [ref=e561]
+          - paragraph [ref=e562]: Today only matters because it belongs to something larger.
+        - button "Return to today" [ref=e563] [cursor=pointer]
+      - generic [ref=e564]:
+        - generic [ref=e565]:
+          - paragraph [ref=e566]: The biggest goal
+          - heading "Build extraordinary wealth. Stay healthy. Stay close to God." [level=2] [ref=e567]: Build extraordinary wealth.Stay healthy. Stay close to God.
+          - paragraph [ref=e568]: The number is not the identity. The identity is becoming capable of creating vast value without sacrificing the foundations that make the success worth having.
+        - generic [ref=e569]:
+          - generic [ref=e570]: North star
+          - strong [ref=e571]: $1B+
+          - generic [ref=e572]: Net worth · long horizon
+      - generic [ref=e573]:
+        - generic [ref=e574]:
+          - generic [ref=e575]:
+            - generic [ref=e576]: Next 30 days
+            - strong [ref=e577]: 42%
+          - list [ref=e580]:
+            - listitem [ref=e581]:
+              - paragraph [ref=e583]: Publish HustleIQ on web and app stores
+            - listitem [ref=e584]:
+              - paragraph [ref=e586]: Recruit real beta testers and validate the core idea
+            - listitem [ref=e587]:
+              - paragraph [ref=e589]: Improve physical and mental health
+            - listitem [ref=e590]:
+              - paragraph [ref=e592]: Begin agency outreach
+        - generic [ref=e593]:
+          - generic [ref=e594]:
+            - generic [ref=e595]: Next 3 months
+            - strong [ref=e596]: 28%
+          - list [ref=e599]:
+            - listitem [ref=e600]:
+              - paragraph [ref=e602]: Earn the first $200/month
+            - listitem [ref=e603]:
+              - paragraph [ref=e605]: Raise stamina and health above average
+            - listitem [ref=e606]:
+              - paragraph [ref=e608]: Build a repeatable outreach rhythm
+        - generic [ref=e609]:
+          - generic [ref=e610]:
+            - generic [ref=e611]: One year
+            - strong [ref=e612]: 14%
+          - list [ref=e615]:
+            - listitem [ref=e616]:
+              - paragraph [ref=e618]: Reach $1,000/month
+            - listitem [ref=e619]:
+              - paragraph [ref=e621]: Do not miss prayer and grow closer to God
+            - listitem [ref=e622]:
+              - paragraph [ref=e624]: Become above average at sales, networking and public speaking
+            - listitem [ref=e625]:
+              - paragraph [ref=e627]: Pass exams with health and relationships intact
+        - generic [ref=e628]:
+          - generic [ref=e629]:
+            - generic [ref=e630]: Five years
+            - strong [ref=e631]: 5%
+          - list [ref=e634]:
+            - listitem [ref=e635]:
+              - paragraph [ref=e637]: Earn $10k–$20k/month
+            - listitem [ref=e638]:
+              - paragraph [ref=e640]: Develop top-tier sales and networking skills
+            - listitem [ref=e641]:
+              - paragraph [ref=e643]: Build a strong, healthy 90kg body and finish a 5km race
+            - listitem [ref=e644]:
+              - paragraph [ref=e646]: Grow YouTube, learn seven languages and sharpen fighting skills

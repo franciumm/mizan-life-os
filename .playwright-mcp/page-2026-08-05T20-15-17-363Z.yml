@@ -1,0 +1,70 @@
+- generic [ref=f1e2]:
+  - link "Skip to content" [ref=f1e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - complementary [ref=f1e4]:
+    - generic [ref=f1e5]:
+      - generic [ref=f1e6]: M
+      - generic [ref=f1e8]:
+        - strong [ref=f1e9]: Mizan
+        - generic [ref=f1e10]: Life operating system
+    - navigation "Main navigation" [ref=f1e11]:
+      - paragraph [ref=f1e12]: Your system
+      - button "Today 1" [ref=f1e284] [cursor=pointer]:
+        - generic [ref=f1e17]: Today
+        - generic [ref=f1e18]: "1"
+      - button "Goals" [ref=f1e19] [cursor=pointer]
+      - button "Insights" [active] [ref=f1e25] [cursor=pointer]
+      - button "Coach" [ref=f1e29] [cursor=pointer]
+      - button "Life map" [ref=f1e33] [cursor=pointer]
+    - generic [ref=f1e38]:
+      - generic [ref=f1e39]:
+        - generic [ref=f1e40]:
+          - generic [ref=f1e41]: Overall rank
+          - strong [ref=f1e42]: —
+        - paragraph [ref=f1e44]: Complete real work to earn a rank. No fake levels.
+      - button "M Mohamed Private workspace" [ref=f1e45] [cursor=pointer]:
+        - generic [ref=f1e46]: M
+        - generic [ref=f1e47]:
+          - strong [ref=f1e48]: Mohamed
+          - generic [ref=f1e49]: Private workspace
+  - main [ref=f1e52]:
+    - banner [ref=f1e53]:
+      - generic [ref=f1e54]:
+        - generic [ref=f1e55]: Wednesday
+        - strong [ref=f1e56]: August 5
+      - generic "Day mode" [ref=f1e57]:
+        - button "Grinding" [ref=f1e58] [cursor=pointer]
+        - button "Recovery" [ref=f1e59] [cursor=pointer]
+        - button "Vacation" [ref=f1e60] [cursor=pointer]
+      - button "Tomorrow planned" [ref=f1e238] [cursor=pointer]
+    - generic [ref=f1e351]:
+      - generic [ref=f1e352]:
+        - generic [ref=f1e353]:
+          - paragraph [ref=f1e354]: Calm, factual feedback
+          - heading "Insights" [level=1] [ref=f1e355]
+          - paragraph [ref=f1e356]: Your behavior is data, not a verdict.
+        - generic [ref=f1e357]: Streak appears once you have real history
+      - generic [ref=f1e361]:
+        - generic [ref=f1e362]:
+          - generic [ref=f1e363]:
+            - generic [ref=f1e364]:
+              - paragraph [ref=f1e365]: Against your best week
+              - heading "Consistency score" [level=2] [ref=f1e366]
+            - strong [ref=f1e367]: 21/100
+          - status [ref=f1e369]:
+            - paragraph [ref=f1e370]: No history yet.
+            - generic [ref=f1e371]: Complete real work for a few days and this chart fills in from behavior — no fabricated bars.
+          - generic [ref=f1e372]:
+            - generic [ref=f1e373]: This week
+            - generic [ref=f1e375]: Best previous week
+        - generic [ref=f1e377]:
+          - paragraph [ref=f1e378]: What the pattern says
+          - heading "Patterns forming" [level=2] [ref=f1e379]
+          - paragraph [ref=f1e380]: Mizan couldn't reach the analysis engine this time. Your day is still tracked; insights will refresh on the next call.
+          - status [ref=f1e381]: Analysis engine offline — commentary above is a fallback. It will refresh on the next call.
+      - status [ref=f1e382]:
+        - generic [ref=f1e383]:
+          - paragraph [ref=f1e384]: Records appear after your first full week of real activity.
+          - generic [ref=f1e385]: Earlier placeholder values were removed — they posed as measurements Mizan never made.
+    - generic "About this workspace" [ref=f1e235]:
+      - paragraph [ref=f1e236]: Mizan is a private life operating system. Nothing leaves this device unless you explicitly call the AI coach or arranger.

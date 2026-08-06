@@ -1,0 +1,64 @@
+- generic [ref=f1e2]:
+  - link "Skip to content" [ref=f1e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - complementary [ref=f1e4]:
+    - generic [ref=f1e5]:
+      - generic [ref=f1e6]: M
+      - generic [ref=f1e8]:
+        - strong [ref=f1e9]: Mizan
+        - generic [ref=f1e10]: Life operating system
+    - navigation "Main navigation" [ref=f1e11]:
+      - paragraph [ref=f1e12]: Your system
+      - button "Today 1" [ref=f1e284] [cursor=pointer]:
+        - generic [ref=f1e17]: Today
+        - generic [ref=f1e18]: "1"
+      - button "Goals" [ref=f1e19] [cursor=pointer]
+      - button "Insights" [ref=f1e25] [cursor=pointer]
+      - button "Coach" [active] [ref=f1e29] [cursor=pointer]
+      - button "Life map" [ref=f1e33] [cursor=pointer]
+    - generic [ref=f1e38]:
+      - generic [ref=f1e39]:
+        - generic [ref=f1e40]:
+          - generic [ref=f1e41]: Overall rank
+          - strong [ref=f1e42]: —
+        - paragraph [ref=f1e44]: Complete real work to earn a rank. No fake levels.
+      - button "M Mohamed Private workspace" [ref=f1e45] [cursor=pointer]:
+        - generic [ref=f1e46]: M
+        - generic [ref=f1e47]:
+          - strong [ref=f1e48]: Mohamed
+          - generic [ref=f1e49]: Private workspace
+  - main [ref=f1e52]:
+    - banner [ref=f1e53]:
+      - generic [ref=f1e54]:
+        - generic [ref=f1e55]: Wednesday
+        - strong [ref=f1e56]: August 5
+      - generic "Day mode" [ref=f1e57]:
+        - button "Grinding" [ref=f1e58] [cursor=pointer]
+        - button "Recovery" [ref=f1e59] [cursor=pointer]
+        - button "Vacation" [ref=f1e60] [cursor=pointer]
+      - button "Tomorrow planned" [ref=f1e238] [cursor=pointer]
+    - generic [ref=f1e300]:
+      - generic [ref=f1e301]:
+        - generic [ref=f1e302]:
+          - paragraph [ref=f1e303]: Your context, remembered
+          - heading "Mizan Coach" [level=1] [ref=f1e304]
+          - paragraph [ref=f1e305]: Strategic when planning. Firm when avoiding. Calm when recovering.
+        - generic [ref=f1e306]: Private conversation
+      - generic [ref=f1e308]:
+        - generic [ref=f1e309]:
+          - heading "I know what you are balancing." [level=2] [ref=f1e313]
+          - paragraph [ref=f1e314]: HustleIQ launch, agency revenue, rehabilitation, college, faith, learning, and the need to actually enjoy your life.
+          - generic [ref=f1e315]:
+            - generic [ref=f1e316]: HustleIQ is at validation
+            - generic [ref=f1e320]: Adductor rehab is improving
+            - generic [ref=f1e323]: Prayer anchors the day
+        - generic [ref=f1e326]:
+          - generic "Conversation with Mizan coach" [ref=f1e327]:
+            - paragraph [ref=f1e332]: Assalamu alaykum. Your health is improving, but uncertainty is stealing more energy than the work itself. What is on your mind?
+          - generic [ref=f1e333]:
+            - textbox "Talk through your plans, uncertainty, pain, or priorities…" [ref=f1e334]
+            - generic [ref=f1e335]:
+              - button "Voice note" [ref=f1e336] [cursor=pointer]
+              - button "Send message" [ref=f1e340] [cursor=pointer]
+    - generic "About this workspace" [ref=f1e235]:
+      - paragraph [ref=f1e236]: Mizan is a private life operating system. Nothing leaves this device unless you explicitly call the AI coach or arranger.

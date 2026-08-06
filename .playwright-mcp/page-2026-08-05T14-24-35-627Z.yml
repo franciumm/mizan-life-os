@@ -1,0 +1,39 @@
+- generic [ref=f7e2]:
+  - main [ref=f7e3]:
+    - generic [ref=f7e4]:
+      - button "Open menu" [ref=f7e5] [cursor=pointer]
+      - generic [ref=f7e8]:
+        - generic [ref=f7e9]: Wednesday
+        - strong [ref=f7e10]: August 5
+      - button "Plan tomorrow" [ref=f7e11] [cursor=pointer]
+    - generic [ref=f7e382]:
+      - generic [ref=f7e383]:
+        - generic [ref=f7e384]:
+          - paragraph [ref=f7e385]: Your context, remembered
+          - heading "Mizan Coach" [level=1] [ref=f7e386]
+          - paragraph [ref=f7e387]: Strategic when planning. Firm when avoiding. Calm when recovering.
+        - generic [ref=f7e388]: Private conversation
+      - generic [ref=f7e390]:
+        - generic [ref=f7e391]:
+          - heading "I know what you are balancing." [level=2] [ref=f7e395]
+          - paragraph [ref=f7e396]: HustleIQ launch, agency revenue, rehabilitation, college, faith, learning, and the need to actually enjoy your life.
+          - generic [ref=f7e397]:
+            - generic [ref=f7e398]: HustleIQ is at validation
+            - generic [ref=f7e402]: Adductor rehab is improving
+            - generic [ref=f7e405]: Prayer anchors the day
+        - generic [ref=f7e408]:
+          - generic [ref=f7e409]:
+            - paragraph [ref=f7e414]: Assalamu alaykum. Your health is improving, but uncertainty is stealing more energy than the work itself. What is on your mind?
+            - paragraph [ref=f7e427]: my adductor is hurting after rehab and I'm not sure if I should push the HustleIQ beta calls today or rest
+            - paragraph [ref=f7e432]: I can't reach the analysis engine right now — your message is saved here. Try again in a moment; nothing is lost.
+          - generic [ref=f7e415]:
+            - textbox "Talk through your plans, uncertainty, pain, or priorities…" [ref=f7e416]
+            - generic [ref=f7e417]:
+              - button "Voice note" [ref=f7e418] [cursor=pointer]
+              - button "Send message" [ref=f7e422] [cursor=pointer]
+  - navigation "Mobile navigation" [ref=f7e272]:
+    - button "Today" [ref=f7e273] [cursor=pointer]
+    - button "Goals" [ref=f7e278] [cursor=pointer]
+    - button "Insights" [ref=f7e284] [cursor=pointer]
+    - button "Coach" [ref=f7e288] [cursor=pointer]
+    - button "Life" [ref=f7e292] [cursor=pointer]

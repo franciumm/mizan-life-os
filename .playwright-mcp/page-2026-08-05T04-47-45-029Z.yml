@@ -1,0 +1,85 @@
+- generic [ref=e2]:
+  - complementary [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]: M
+      - generic [ref=e7]:
+        - strong [ref=e8]: Mizan
+        - generic [ref=e9]: Life operating system
+    - navigation "Main navigation" [ref=e10]:
+      - paragraph [ref=e11]: Your system
+      - button "Today 2" [ref=e336] [cursor=pointer]:
+        - generic [ref=e16]: Today
+        - generic [ref=e17]: "2"
+      - button "Goals" [ref=e18] [cursor=pointer]
+      - button "Insights" [active] [ref=e24] [cursor=pointer]
+      - button "Coach" [ref=e28] [cursor=pointer]
+      - button "Life map" [ref=e32] [cursor=pointer]
+    - generic [ref=e37]:
+      - generic [ref=e38]:
+        - generic [ref=e39]:
+          - generic [ref=e40]: Overall rank
+          - strong [ref=e41]: Lv. 18
+        - paragraph [ref=e44]: Momentum · 320 XP to Disciplined
+      - button "M Mohamed Private workspace" [ref=e45] [cursor=pointer]:
+        - generic [ref=e46]: M
+        - generic [ref=e47]:
+          - strong [ref=e48]: Mohamed
+          - generic [ref=e49]: Private workspace
+  - main [ref=e52]:
+    - generic [ref=e53]:
+      - generic [ref=e54]:
+        - generic [ref=e55]: Wednesday
+        - strong [ref=e56]: August 5
+      - generic "Day mode" [ref=e57]:
+        - button "Grinding" [ref=e58] [cursor=pointer]
+        - button "Recovery" [ref=e59] [cursor=pointer]
+        - button "Vacation" [ref=e60] [cursor=pointer]
+      - button "Tomorrow planned" [ref=e515] [cursor=pointer]
+    - generic [ref=e647]:
+      - generic [ref=e648]:
+        - generic [ref=e649]:
+          - paragraph [ref=e650]: Calm, factual feedback
+          - heading "Insights" [level=1] [ref=e651]
+          - paragraph [ref=e652]: Your behavior is data, not a verdict.
+        - generic [ref=e653]: 12 days current streak
+      - generic [ref=e657]:
+        - generic [ref=e658]:
+          - generic [ref=e659]:
+            - generic [ref=e660]:
+              - paragraph [ref=e661]: Against your best week
+              - heading "Consistency score" [level=2] [ref=e662]
+            - strong [ref=e663]: 55/100
+          - generic [ref=e664]:
+            - generic [ref=e665]: Th
+            - generic [ref=e669]: Fr
+            - generic [ref=e673]: Sa
+            - generic [ref=e677]: Su
+            - generic [ref=e681]: Mo
+            - generic [ref=e685]: Tu
+            - generic [ref=e689]: We
+          - generic [ref=e693]:
+            - generic [ref=e694]: This week
+            - generic [ref=e696]: Best previous week
+        - generic [ref=e698]:
+          - paragraph [ref=e699]: What the pattern says
+          - heading "Your late-day energy is real." [level=2] [ref=e700]
+          - paragraph [ref=e701]: You completed 71% more focused work after Asr than before Dhuhr. Stop judging the morning as if it must carry the entire day.
+          - heading "The risk" [level=3] [ref=e703]
+          - paragraph [ref=e704]: Unclear first actions caused three phone-heavy mornings. Evening planning reduced that pattern twice this week.
+      - generic [ref=e705]:
+        - generic [ref=e706]:
+          - generic [ref=e707]: Focus record
+          - strong [ref=e708]: 6h 42m
+          - generic [ref=e709]: Jul 29 · HustleIQ
+        - generic [ref=e710]:
+          - generic [ref=e711]: Best balanced day
+          - strong [ref=e712]: "86"
+          - generic [ref=e713]: Faith · health · business
+        - generic [ref=e714]:
+          - generic [ref=e715]: Personality reps
+          - strong [ref=e716]: "7"
+          - generic [ref=e717]: Personal record this month
+        - generic [ref=e718]:
+          - generic [ref=e719]: Doomscroll-free
+          - strong [ref=e720]: 5 days
+          - generic [ref=e721]: "Best: 11 days"

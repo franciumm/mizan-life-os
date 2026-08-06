@@ -1,0 +1,255 @@
+- generic [ref=e2]:
+  - complementary [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]: M
+      - generic [ref=e7]:
+        - strong [ref=e8]: Mizan
+        - generic [ref=e9]: Life operating system
+    - navigation "Main navigation" [ref=e10]:
+      - paragraph [ref=e11]: Your system
+      - button "Today 2" [ref=e336] [cursor=pointer]:
+        - generic [ref=e16]: Today
+        - generic [ref=e17]: "2"
+      - button "Goals" [ref=e18] [cursor=pointer]
+      - button "Insights" [ref=e24] [cursor=pointer]
+      - button "Coach" [ref=e28] [cursor=pointer]
+      - button "Life map" [ref=e32] [cursor=pointer]
+    - generic [ref=e37]:
+      - generic [ref=e38]:
+        - generic [ref=e39]:
+          - generic [ref=e40]: Overall rank
+          - strong [ref=e41]: Lv. 18
+        - paragraph [ref=e44]: Momentum · 320 XP to Disciplined
+      - button "M Mohamed Private workspace" [ref=e45] [cursor=pointer]:
+        - generic [ref=e46]: M
+        - generic [ref=e47]:
+          - strong [ref=e48]: Mohamed
+          - generic [ref=e49]: Private workspace
+  - main [ref=e52]:
+    - generic [ref=e53]:
+      - generic [ref=e54]:
+        - generic [ref=e55]: Wednesday
+        - strong [ref=e56]: August 5
+      - generic "Day mode" [ref=e57]:
+        - button "Grinding" [ref=e58] [cursor=pointer]
+        - button "Recovery" [ref=e59] [cursor=pointer]
+        - button "Vacation" [ref=e60] [cursor=pointer]
+      - button "Plan tomorrow" [active] [ref=e61] [cursor=pointer]
+    - generic [ref=e65]:
+      - generic [ref=e66]:
+        - generic [ref=e67]:
+          - paragraph [ref=e68]: Assalamu alaykum, Mohamed
+          - heading "Make today count." [level=1] [ref=e370]
+          - generic "Today’s momentum" [ref=e70]:
+            - generic [ref=e71]:
+              - generic [ref=e74]: 12-day
+              - text: momentum
+            - generic [ref=e75]:
+              - generic [ref=e80]: 2/4
+              - text: missions moved
+            - generic [ref=e371]:
+              - generic [ref=e375]: 30m
+              - text: to the 4h target
+        - generic "Day power 48 out of 100" [ref=e337]:
+          - generic [ref=e87]:
+            - strong [ref=e88]: "48"
+            - generic [ref=e89]: /100
+          - generic [ref=e90]: Day power
+      - region [ref=e91]:
+        - generic [ref=e92]:
+          - generic [ref=e93]:
+            - paragraph [ref=e94]: Current status
+            - heading "Your life pulse" [level=2] [ref=e95]
+          - button "Full life map" [ref=e96] [cursor=pointer]
+        - generic [ref=e99]:
+          - button "Faith +5% 82 Momentum" [ref=e100] [cursor=pointer]:
+            - generic [ref=e101]:
+              - generic [ref=e102]: Faith
+              - generic [ref=e103]: +5%
+            - strong [ref=e104]: "82"
+            - paragraph [ref=e107]: Momentum
+          - button "Health +3% 61 Rebuilding" [ref=e108] [cursor=pointer]:
+            - generic [ref=e109]:
+              - generic [ref=e110]: Health
+              - generic [ref=e111]: +3%
+            - strong [ref=e112]: "61"
+            - paragraph [ref=e115]: Rebuilding
+          - button "Business +8% 73 Operator" [ref=e116] [cursor=pointer]:
+            - generic [ref=e117]:
+              - generic [ref=e118]: Business
+              - generic [ref=e119]: +8%
+            - strong [ref=e120]: "73"
+            - paragraph [ref=e123]: Operator
+          - button "College -2% 68 Steady" [ref=e124] [cursor=pointer]:
+            - generic [ref=e125]:
+              - generic [ref=e126]: College
+              - generic [ref=e127]: "-2%"
+            - strong [ref=e128]: "68"
+            - paragraph [ref=e131]: Steady
+          - button "Mind +6% 57 Foundation" [ref=e132] [cursor=pointer]:
+            - generic [ref=e133]:
+              - generic [ref=e134]: Mind
+              - generic [ref=e135]: +6%
+            - strong [ref=e136]: "57"
+            - paragraph [ref=e139]: Foundation
+          - button "Family +1% 76 Present" [ref=e140] [cursor=pointer]:
+            - generic [ref=e141]:
+              - generic [ref=e142]: Family
+              - generic [ref=e143]: +1%
+            - strong [ref=e144]: "76"
+            - paragraph [ref=e147]: Present
+          - button "Personality +9% 46 Courage I" [ref=e148] [cursor=pointer]:
+            - generic [ref=e149]:
+              - generic [ref=e150]: Personality
+              - generic [ref=e151]: +9%
+            - strong [ref=e152]: "46"
+            - paragraph [ref=e155]: Courage I
+      - generic [ref=e156]:
+        - region [ref=e376]:
+          - generic [ref=e158]:
+            - generic [ref=e159]:
+              - paragraph [ref=e160]: Today’s direction
+              - heading "Daily missions" [level=2] [ref=e377]
+            - generic [ref=e382]:
+              - strong [ref=e383]: 3h 30m
+              - text: / 4h
+          - generic [ref=e384]:
+            - paragraph [ref=e388]:
+              - generic [ref=e389]: 88%
+              - text: of today’s protected focus complete
+            - button "Start next mission" [ref=e390] [cursor=pointer]
+          - generic [ref=e395]:
+            - generic [ref=e396]:
+              - button "Reopen Run a HustleIQ beta test with 3 real users" [ref=e397] [cursor=pointer]
+              - generic [ref=e400]: "01"
+              - generic [ref=e401]:
+                - generic [ref=e402]:
+                  - generic [ref=e403]: Business
+                  - generic [ref=e404]: Rolled 1/4
+                - heading "Run a HustleIQ beta test with 3 real users" [level=3] [ref=e405]
+                - paragraph [ref=e406]: 10:30–13:00 · 150 min
+            - generic [ref=e410]:
+              - button "Complete Record the UGC launch story and first hook" [ref=e411] [cursor=pointer]
+              - generic [ref=e412]: "02"
+              - generic [ref=e413]:
+                - generic [ref=e414]:
+                  - generic [ref=e415]: Next move
+                  - generic [ref=e416]: Business
+                - heading "Record the UGC launch story and first hook" [level=3] [ref=e417]
+                - paragraph [ref=e418]: 16:45–18:15 · 90 min
+            - generic [ref=e422]:
+              - button "Reopen Complete adductor rehabilitation session" [ref=e423] [cursor=pointer]
+              - generic [ref=e426]: "03"
+              - generic [ref=e427]:
+                - generic [ref=e428]: Health
+                - heading "Complete adductor rehabilitation session" [level=3] [ref=e430]
+                - paragraph [ref=e431]: 13:45–14:45 · 60 min
+            - generic [ref=e435]:
+              - button "Complete Japanese listening + one random learning trail" [ref=e436] [cursor=pointer]
+              - generic [ref=e437]: "04"
+              - generic [ref=e438]:
+                - generic [ref=e439]:
+                  - generic [ref=e440]: Mind
+                  - generic [ref=e441]: Rolled 2/4
+                - heading "Japanese listening + one random learning trail" [level=3] [ref=e442]
+                - paragraph [ref=e443]: 20:45–22:15 · 90 min
+          - generic [ref=e447]:
+            - button "I’m stuck" [ref=e448] [cursor=pointer]
+            - button "Arrange tasks" [ref=e451] [cursor=pointer]
+        - complementary [ref=e236]:
+          - generic [ref=e237]:
+            - generic [ref=e238]:
+              - generic [ref=e239]:
+                - paragraph [ref=e240]: Cairo · Today
+                - heading "Prayer rhythm" [level=2] [ref=e241]
+              - generic [ref=e242]: 0/5
+            - generic [ref=e243]:
+              - button [ref=e244] [cursor=pointer]:
+                - strong [ref=e246]: Fajr
+                - time [ref=e247]: 4:39
+              - button [ref=e248] [cursor=pointer]:
+                - strong [ref=e250]: Dhuhr
+                - time [ref=e251]: 1:02
+              - button [ref=e252] [cursor=pointer]:
+                - strong [ref=e254]: Asr
+                - time [ref=e255]: 4:38
+              - button [ref=e256] [cursor=pointer]:
+                - strong [ref=e258]: Maghrib
+                - time [ref=e259]: 7:49
+              - button [ref=e260] [cursor=pointer]:
+                - strong [ref=e262]: Isha
+                - time [ref=e263]: 9:13
+            - button "Daily Quran 10 minutes · after Maghrib" [ref=e264] [cursor=pointer]:
+              - generic [ref=e267]:
+                - strong [ref=e268]: Daily Quran
+                - generic [ref=e269]: 10 minutes · after Maghrib
+          - generic [ref=e272]:
+            - generic [ref=e273]:
+              - generic [ref=e274]:
+                - paragraph [ref=e275]: Personality grind · 2/3
+                - heading "Courage rep" [level=2] [ref=e276]
+              - button "Draw another challenge" [ref=e277] [cursor=pointer]
+            - blockquote [ref=e280]: “Record a 10-minute explanation with fewer than five filler words”
+            - generic [ref=e281]:
+              - button "Mark complete" [ref=e282] [cursor=pointer]
+              - button "Draw another" [ref=e285] [cursor=pointer]
+      - generic [ref=e286]:
+        - generic [ref=e287]:
+          - paragraph [ref=e288]: The biggest goal
+          - heading "A life of wealth, strength and closeness to God." [level=2] [ref=e289]: A life of wealth, strengthand closeness to God.
+          - paragraph [ref=e290]: Build toward $1B+ without arriving empty. Protect faith, health, family and the mind capable of carrying it.
+          - button "See the path" [ref=e291] [cursor=pointer]
+        - generic [ref=e294]:
+          - generic [ref=e295]:
+            - generic [ref=e296]: "01"
+            - strong [ref=e297]: $1B+
+            - paragraph [ref=e298]: Build value at an extraordinary scale.
+          - generic [ref=e299]:
+            - generic [ref=e300]: "02"
+            - strong [ref=e301]: Strong body
+            - paragraph [ref=e302]: Healthy, capable and resilient.
+          - generic [ref=e303]:
+            - generic [ref=e304]: "03"
+            - strong [ref=e305]: Strong faith
+            - paragraph [ref=e306]: Prayer and purpose stay central.
+      - generic [ref=e307]:
+        - generic [ref=e308]:
+          - paragraph [ref=e309]: 30-second check-in
+          - heading "Give the system today’s context." [level=2] [ref=e310]
+        - generic [ref=e311]:
+          - generic [ref=e312]:
+            - generic [ref=e313]: energy
+            - generic [ref=e314]:
+              - button "energy 1 of 5" [ref=e315] [cursor=pointer]: "1"
+              - button "energy 2 of 5" [ref=e316] [cursor=pointer]: "2"
+              - button "energy 3 of 5" [ref=e317] [cursor=pointer]: "3"
+              - button "energy 4 of 5" [ref=e318] [cursor=pointer]: "4"
+              - button "energy 5 of 5" [ref=e319] [cursor=pointer]: "5"
+          - generic [ref=e320]:
+            - generic [ref=e321]: pain
+            - generic [ref=e322]:
+              - button "pain 1 of 5" [ref=e323] [cursor=pointer]: "1"
+              - button "pain 2 of 5" [ref=e324] [cursor=pointer]: "2"
+              - button "pain 3 of 5" [ref=e325] [cursor=pointer]: "3"
+              - button "pain 4 of 5" [ref=e326] [cursor=pointer]: "4"
+              - button "pain 5 of 5" [ref=e327] [cursor=pointer]: "5"
+          - generic [ref=e328]:
+            - generic [ref=e329]: focus
+            - generic [ref=e330]:
+              - button "focus 1 of 5" [ref=e331] [cursor=pointer]: "1"
+              - button "focus 2 of 5" [ref=e332] [cursor=pointer]: "2"
+              - button "focus 3 of 5" [ref=e333] [cursor=pointer]: "3"
+              - button "focus 4 of 5" [ref=e334] [cursor=pointer]: "4"
+              - button "focus 5 of 5" [ref=e335] [cursor=pointer]: "5"
+  - button "Close planner" [ref=e458] [cursor=pointer]
+  - dialog [ref=e459]:
+    - generic [ref=e460]:
+      - generic [ref=e461]:
+        - paragraph [ref=e462]: Evening planning
+        - heading "Empty your mind. I’ll arrange it." [level=2] [ref=e463]
+      - button "Close" [ref=e464] [cursor=pointer]
+    - paragraph [ref=e467]: Tell me what must happen, what feels uncertain, and any fixed commitments. Nothing becomes final until you approve it.
+    - generic [ref=e468]:
+      - 'textbox "Example: test HustleIQ with real users, physiotherapy at 2, call two agencies, record YouTube intro…" [ref=e469]'
+      - button "Voice note" [ref=e470] [cursor=pointer]
+    - button "Arrange tomorrow" [ref=e474] [cursor=pointer]
