@@ -1900,9 +1900,12 @@ export function MizanDashboard() {
                   fetch(`${API_BASE_URL}/api/daily-log/${todayKey}`, {
                     method: "PATCH",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ checkIn })
+                    body: JSON.stringify(checkIn)
                   })
-                  .then(() => setToast("Check-in saved!"))
+                  .then(async (res) => {
+                    if (!res.ok) throw new Error("Failed to save check-in");
+                    setToast("Check-in saved!");
+                  })
                   .catch(console.error);
                 }}
               >
