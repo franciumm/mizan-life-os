@@ -1139,6 +1139,7 @@ export function MizanDashboard() {
       // were fabricated. We send only the structural names so the coach knows
       // which life areas the user is balancing, without lying about metrics.
       lifeAreas: lifeAreas.map((a) => ({ name: a.name })),
+      pastTasks: pastTasks.slice(0, 7), // Send the last 7 days of history for context
       contextNotes,
       dateKey: todayKey,
     };
