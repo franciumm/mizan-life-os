@@ -898,10 +898,16 @@ export function MizanDashboard() {
     return () => window.clearTimeout(timer);
   }, [toast]);
 
-  // Insights run about once a day per the Phase 1 spec. Cache the result in
-  // localStorage under a dateKey-scoped key so we don't pay for the same
-  // commentary twice. The state itself is also stored in React state.
-  const insightsCacheKey = `mizan-insights-v2-${todayKey}`;
+  // Insights run about once a week per user preference. Cache the result in
+  // localStorage under a weekKey-scoped key so we don't pay for the same
+  // commentary automatically twice.
+  const weekDay = cairoNow.getDay();
+  const diff = cairoNow.getDate() - weekDay + (weekDay === 0 ? -6 : 1);
+  const weekStart = new Date(cairoNow);
+  weekStart.setDate(diff);
+  const weekKey = cairoDateKey(weekStart);
+  
+  const insightsCacheKey = `mizan-insights-v2-${weekKey}`;
   const fetchInsights = (force = false) => {
     if (!hydrated) return;
     if (insights && !force) return;
@@ -960,7 +966,7 @@ export function MizanDashboard() {
   useEffect(() => {
     fetchInsights();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hydrated, todayKey, insightsCacheKey]);
+  }, [hydrated, weekKey, insightsCacheKey]);
 
   const focusMinutes = useMemo(
     () => tasks.filter((task) => task.done).reduce((sum, task) => sum + task.minutes, 0),
