@@ -1133,7 +1133,7 @@ export function MizanDashboard() {
   function buildCoachContext() {
     return {
       mode,
-      tasks: tasks.map((t) => ({
+      tasks: tasks.today.map((t) => ({
         title: t.title,
         category: t.category,
         range: t.range,
