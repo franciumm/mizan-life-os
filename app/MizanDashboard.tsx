@@ -901,7 +901,7 @@ export function MizanDashboard() {
   // Insights run about once a day per the Phase 1 spec. Cache the result in
   // localStorage under a dateKey-scoped key so we don't pay for the same
   // commentary twice. The state itself is also stored in React state.
-  const insightsCacheKey = `mizan-insights-${todayKey}`;
+  const insightsCacheKey = `mizan-insights-v2-${todayKey}`;
   useEffect(() => {
     if (!hydrated) return;
     if (insights) return; // already loaded this session
@@ -1133,7 +1133,7 @@ export function MizanDashboard() {
   function buildCoachContext() {
     return {
       mode,
-      tasks: tasks.today.map((t) => ({
+      tasks: tasks.map((t) => ({
         title: t.title,
         category: t.category,
         range: t.range,
