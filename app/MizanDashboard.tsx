@@ -1934,6 +1934,7 @@ export function MizanDashboard() {
             pending={insightsPending}
             error={insightsError}
             onOpenHistory={() => setView("history")}
+            onRefresh={() => fetchInsights(true)}
           />
         )}
         {view === "history" && (
