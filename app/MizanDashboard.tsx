@@ -555,7 +555,13 @@ export function MizanDashboard() {
         }
         if (data.dailyLog) {
           if (data.dailyLog.mode) setMode(data.dailyLog.mode);
-          if (data.dailyLog.checkIn) setCheckIn(data.dailyLog.checkIn);
+          if (data.dailyLog.energy !== undefined || data.dailyLog.pain !== undefined || data.dailyLog.focus !== undefined) {
+          setCheckIn({
+            energy: data.dailyLog.energy ?? 3,
+            pain: data.dailyLog.pain ?? 2,
+            focus: data.dailyLog.focus ?? 3
+          });
+        }
           if (data.dailyLog.challenge) setChallenge(data.dailyLog.challenge);
           if (typeof data.dailyLog.challengeDone === "boolean") setChallengeDone(data.dailyLog.challengeDone);
           if (typeof data.dailyLog.quranDone === "boolean") setQuranDone(data.dailyLog.quranDone);
