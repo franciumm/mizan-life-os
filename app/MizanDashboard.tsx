@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://mizan-backend-lyart.vercel.app';
 type View = "today" | "goals" | "insights" | "coach" | "life" | "history";
 type DayMode = "grinding" | "recovery" | "vacation";
 type Category =
@@ -13,7 +15,7 @@ type Category =
   | "Personality";
 
 type Task = {
-  id: number;
+  id: string;
   title: string;
   category: Category;
   range: string;
@@ -23,6 +25,7 @@ type Task = {
   kind: "mission" | "support";
   details?: string;
   linkedGoalIds?: string[];
+  position?: number;
 };
 
 type Prayer = {
@@ -61,6 +64,7 @@ type PersistedPayload = {
 
 export type Goal = { id: string; title: string; tasksDone: number; parentGoalIds?: string[] };
 export type Horizon = {
+  id?: string;
   label: string;
   startDate?: string;
   targetDate?: string;
@@ -268,19 +272,13 @@ const lifeAreas = [
   { name: "Personality", color: "personality" },
 ];
 
-const personalityChallenges: Array<{ text: string; tier: 0 | 1 | 2 }> = [
-  { text: "Speak to one new person and ask a real follow-up question", tier: 0 },
-  { text: "Start a conversation at physiotherapy or college", tier: 0 },
-  { text: "Record a 10-minute explanation with fewer than five filler words", tier: 1 },
-  { text: "Pitch HustleIQ in 60 seconds without reading a script", tier: 1 },
-  { text: "Ask one founder for direct feedback on your beta-testing problem", tier: 1 },
-  { text: "Make one cold call and stay present through the discomfort", tier: 2 },
-];
-
-// Phase 7: weeklyBars is empty until real per-day completion history is
-// tracked. The Insights chart renders an explicit empty state when this is
-// empty rather than drawing fabricated bars.
-const weeklyBars: number[] = [];
+export type CourageRep = {
+  _id: string;
+  text: string;
+  tier: number;
+  completions: number;
+  active: boolean;
+};
 
 const getInitialGoals = () => {
   const now = new Date();
@@ -341,6 +339,7 @@ type IconName =
   | "chart"
   | "spark"
   | "map"
+  | "list"
   | "clock"
   | "flame"
   | "check"
@@ -356,7 +355,8 @@ type IconName =
   | "menu"
   | "close"
   | "send"
-  | "pause";
+  | "pause"
+  | "calendar";
 
 function Icon({ name, size = 18 }: { name: IconName; size?: number }) {
   const common = {
@@ -377,6 +377,7 @@ function Icon({ name, size = 18 }: { name: IconName; size?: number }) {
     chart: <><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></>,
     spark: <><path d="m12 3 1.3 4.4a4.7 4.7 0 0 0 3.2 3.2L21 12l-4.5 1.4a4.7 4.7 0 0 0-3.2 3.2L12 21l-1.3-4.4a4.7 4.7 0 0 0-3.2-3.2L3 12l4.5-1.4a4.7 4.7 0 0 0 3.2-3.2L12 3Z"/></>,
     map: <><path d="m3 6 5-3 8 3 5-3v15l-5 3-8-3-5 3V6Z"/><path d="M8 3v15M16 6v15"/></>,
+    list: <><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></>,
     clock: <><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></>,
     flame: <path d="M13.5 3S15 7 11 9c-2.4 1.2-3.6 3.4-2.2 5.7.5-2.1 1.9-3.1 3.2-3.7-.3 2.5 1.5 3.5 2.2 5.2.7-1 1.2-2.1 1.2-3.2 1.7 1.3 2.6 3.2 2.2 5.2A7 7 0 0 1 5 15c0-5.7 5.7-6.2 8.5-12Z"/>,
     check: <path d="m5 12 4 4L19 6"/>,
@@ -393,6 +394,7 @@ function Icon({ name, size = 18 }: { name: IconName; size?: number }) {
     close: <><path d="m6 6 12 12M18 6 6 18"/></>,
     send: <><path d="m22 2-7 20-4-9-9-4 20-7Z"/><path d="M22 2 11 13"/></>,
     pause: <><path d="M9 5v14M15 5v14"/></>,
+    calendar: <><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></>,
   };
 
   return <svg {...common}>{paths[name]}</svg>;
@@ -415,11 +417,24 @@ function microStepFor(task: Task) {
   return `Take the first visible action for “${task.title}” for five minutes.`;
 }
 
+const apiDebounceTimers: Record<string, any> = {};
+function apiPatch(url: string, body: any) {
+  if (apiDebounceTimers[url]) clearTimeout(apiDebounceTimers[url]);
+  apiDebounceTimers[url] = setTimeout(() => {
+    fetch(url, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    }).catch(console.error);
+  }, 1000);
+}
+
 export function MizanDashboard() {
   const [view, setView] = useState<View>("today");
   const [mode, setMode] = useState<DayMode>("grinding");
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
   const [pastTasks, setPastTasks] = useState<{ dateKey: string; tasks: Task[] }[]>([]);
+  const [weeklyLogs, setWeeklyLogs] = useState<any[]>([]);
   const [tomorrowTasks, setTomorrowTasks] = useState<Task[]>([]);
   const [prayers, setPrayers] = useState<Prayer[]>(() => getCairoPrayerTimes());
   const [plannerOpen, setPlannerOpen] = useState(false);
@@ -432,23 +447,25 @@ export function MizanDashboard() {
   // microStepFor heuristic — but mark it so the chip says so. Per the
   // audit fix: never silently serve a local heuristic as if it were AI.
   const [stuckFallback, setStuckFallback] = useState(false);
-  const [challenge, setChallenge] = useState<string>(personalityChallenges[1].text);
+  const [challenge, setChallenge] = useState<string>("");
   const [challengeDone, setChallengeDone] = useState(false);
   const [writingChallenge, setWritingChallenge] = useState(false);
   const [draftChallenge, setDraftChallenge] = useState("");
+  const [reps, setReps] = useState<CourageRep[]>([]);
+  const [repsModalOpen, setRepsModalOpen] = useState(false);
   const [offlinePlannerMode, setOfflinePlannerMode] = useState(false);
   // Personality-grind escalation: highest tier the user has actually completed
   // (0 = entry, 1 = medium, 2 = hard). drawChallenge biases the next pick
   // toward tier+1 so the user does not stall at the same difficulty.
   const [highestTierDone, setHighestTierDone] = useState(0);
   const [quranDone, setQuranDone] = useState(false);
-  const [editingTaskId, setEditingTaskId] = useState<number | "new" | null>(null);
+  const [editingTaskId, setEditingTaskId] = useState<string | "new" | null>(null);
   const [newTaskKind, setNewTaskKind] = useState<"mission" | "support">("mission");
-  const [activeTaskId, setActiveTaskId] = useState<number | null>(null);
+  const [activeTaskId, setActiveTaskId] = useState<string | null>(null);
   const [checkIn, setCheckIn] = useState({ energy: 3, pain: 2, focus: 3 });
   const [toast, setToast] = useState("");
   const [coachInput, setCoachInput] = useState("");
-  const [coachMessages, setCoachMessages] = useState([
+  const [coachMessages, setCoachMessages] = useState<{from: 'user' | 'coach', text: string}[]>([
     {
       from: "coach" as const,
       text: "Assalamu alaykum. Your health is improving, but uncertainty is stealing more energy than the work itself. What is on your mind?",
@@ -456,7 +473,7 @@ export function MizanDashboard() {
   ]);
   const [contextNotes, setContextNotes] = useState<string[]>(["Tap to describe what you're balancing right now."]);
   const [goalHorizonsState, setGoalHorizonsState] = useState<Horizon[]>([]);
-  const [editingTomorrowId, setEditingTomorrowId] = useState<number | null>(null);
+  const [editingTomorrowId, setEditingTomorrowId] = useState<string | null>(null);
   const [editingDraftIndex, setEditingDraftIndex] = useState<number | null>(null);
   const [hydrated, setHydrated] = useState(false);
   // AI request state — visible failure modes per Phase 1 spec.
@@ -488,6 +505,8 @@ export function MizanDashboard() {
   // Mutable abort handle. We don't need a full AbortController —
   // the whisper module polls `aborted` and stops MediaRecorder tracks.
   const voiceAbortRef = useRef<{ aborted: boolean } | null>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
   // Phase 3: rollover reconsideration. When a task hits rolled===4 we surface
   // a modal instead of silently auto-rolling it forever. The user decides:
   // keep (reset counter), drop (delete), or defer (dismiss, counter stays).
@@ -504,203 +523,74 @@ export function MizanDashboard() {
   }, []);
 
   const todayKey = cairoDateKey(cairoNow);
+  const tomorrowKey = cairoDateKey(new Date(cairoNow.getTime() + 24 * 60 * 60 * 1000));
   const weekdayLabel = new Intl.DateTimeFormat("en-US", { weekday: "long", timeZone: "Africa/Cairo" }).format(cairoNow);
   const dateLabel = new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", timeZone: "Africa/Cairo" }).format(cairoNow);
   const [loadedDay, setLoadedDay] = useState(todayKey);
 
   function getInitialGoals(): Horizon[] {
-    const { year } = cairoDateParts(cairoNow);
-    const endOfYear = `${year}-12-31`;
-    const plus30 = cairoDateAddDays(cairoNow, 30);
-    const plus90 = cairoDateAddDays(cairoNow, 90);
-    
-    const today = cairoDateKey(cairoNow);
-    return [
-      { id: "1mo", label: "Next 30 days", progress: 0, goals: [], startDate: today, targetDate: plus30 },
-      { id: "3mo", label: "Next 3 months", progress: 0, goals: [], startDate: today, targetDate: plus90 },
-      { id: "1yr", label: "One year", progress: 0, goals: [], startDate: today, targetDate: endOfYear },
-      { id: "5yr", label: "Five years", progress: 0, goals: [], startDate: today, targetDate: "" }
-    ];
+    return [];
   }
 
-  useEffect(() => {
-    const loadTimer = window.setTimeout(() => {
-      try {
-        const saved = window.localStorage.getItem(STORAGE_KEY);
-        if (saved) {
-          const raw = JSON.parse(saved);
-          const validation = validatePayload(raw);
-          if (!validation.ok) {
-            // Phase 6: validation failed. Drop the payload, surface a quiet
-            // notice, and let the rest of the day render from defaults.
-            // We never claim the data was "corrupted" or "broken" — the copy
-            // is intentionally calm so the user doesn't panic.
-            window.localStorage.removeItem(STORAGE_KEY);
-            setDataNotice("Mizan could not read your saved workspace, so it started fresh. Your day continues as normal.");
-            setHydrated(true);
-            return;
-          }
-          const parsed = migratePayload(validation.value);
-          const isSameCairoDay = parsed.dateKey === todayKey;
-          if (isSameCairoDay) {
-            if (parsed.mode) setMode(parsed.mode);
-            if (parsed.tasks && Array.isArray(parsed.tasks)) {
-              parsed.tasks = parsed.tasks.map((t: any) => {
-                if (t.linkedGoalId && !t.linkedGoalIds) {
-                  return { ...t, linkedGoalIds: [t.linkedGoalId] };
-                }
-                return t;
-              });
-              setTasks(parsed.tasks as Task[]);
-            }
-            if (parsed.tomorrowTasks && Array.isArray(parsed.tomorrowTasks)) {
-              parsed.tomorrowTasks = parsed.tomorrowTasks.map((t: any) => {
-                if (t.linkedGoalId && !t.linkedGoalIds) {
-                  return { ...t, linkedGoalIds: [t.linkedGoalId] };
-                }
-                return t;
-              });
-              setTomorrowTasks(parsed.tomorrowTasks as Task[]);
-            }
-            if (parsed.prayers) setPrayers(parsed.prayers);
-            if (parsed.checkIn) setCheckIn(parsed.checkIn);
-            if (parsed.challenge) setChallenge(parsed.challenge);
-            if (typeof parsed.challengeDone === "boolean") setChallengeDone(parsed.challengeDone);
-            if (typeof parsed.quranDone === "boolean") setQuranDone(parsed.quranDone);
-            if (typeof parsed.highestTierDone === "number") setHighestTierDone(parsed.highestTierDone);
-            if (parsed.pastTasks) {
-              setPastTasks(parsed.pastTasks as { dateKey: string; tasks: Task[] }[]);
-            }
-          } else {
-            // Rollover logic: we are on a new day. Save yesterday's tasks into history.
-            let newPastTasks = (parsed.pastTasks as { dateKey: string; tasks: Task[] }[]) || [];
-            if (parsed.tasks && Array.isArray(parsed.tasks) && parsed.tasks.length > 0) {
-              newPastTasks = [{ dateKey: parsed.dateKey || "unknown", tasks: parsed.tasks as Task[] }, ...newPastTasks];
-              // Keep only last 30 days
-              if (newPastTasks.length > 30) newPastTasks = newPastTasks.slice(0, 30);
-            }
-            setPastTasks(newPastTasks);
-
-            if (parsed.tomorrowTasks?.length) {
-              setTasks(parsed.tomorrowTasks.map((task) => ({ ...task, done: false })));
-            } else if (parsed.tasks?.length) {
-              const rolled = parsed.tasks
-                .filter((task) => !task.done)
-                .map((task) => ({ ...task, done: false, rolled: Math.min(4, task.rolled + 1) }));
-              if (rolled.length) setTasks(rolled);
-            }
-          }
-          // contextNotes persist across days
-          if (parsed.contextNotes) setContextNotes(parsed.contextNotes as string[]);
+  const fetchSync = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/sync`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.horizons && data.goals) {
+          const mappedGoals = data.goals.map((g: any) => ({ ...g, id: g._id }));
+          const nestedHorizons = data.horizons.sort((a: any, b: any) => (a.position || 0) - (b.position || 0)).map((h: any) => ({
+            ...h,
+            id: h._id,
+            goals: mappedGoals.filter((g: any) => g.horizonId === h._id).sort((a: any, b: any) => (a.position || 0) - (b.position || 0))
+          }));
+          setGoalHorizonsState(nestedHorizons);
+        } else if (data.horizons) {
+          setGoalHorizonsState(data.horizons.map((h: any) => ({ ...h, id: h._id, goals: [] })));
         }
-      } catch {
-        // Phase 6: JSON.parse threw — same calm notice path as a failed
-        // shape check. Don't swallow silently, don't alarm the user.
-        setDataNotice("Mizan could not read your saved workspace, so it started fresh. Your day continues as normal.");
-        window.localStorage.removeItem(STORAGE_KEY);
-      }
-      
-      try {
-        const savedGoalsV2 = window.localStorage.getItem("mizan-goals-v2");
-        if (savedGoalsV2) {
-          const parsedV2 = JSON.parse(savedGoalsV2);
-          const repaired = parsedV2.map((h: any) => {
-            let startDate = h.startDate;
-            let targetDate = h.targetDate;
-            if (!targetDate) {
-              const now = new Date();
-              if (h.label === "Next 30 days") { startDate = cairoDateAddDays(now, -12); targetDate = cairoDateAddDays(now, 18); }
-              else if (h.label === "Next 3 months") { startDate = cairoDateAddDays(now, -25); targetDate = cairoDateAddDays(now, 65); }
-              else if (h.label === "One year") { startDate = cairoDateAddDays(now, -51); targetDate = cairoDateAddDays(now, 314); }
-              else if (h.label === "Five years") { startDate = cairoDateAddDays(now, -91); targetDate = cairoDateAddDays(now, 1734); }
-              else { startDate = startDate || cairoDateKey(now); }
-            }
-            return {
-              ...h,
-              startDate,
-              targetDate,
-              goals: h.goals.map((g: any) => {
-                if (typeof g === "string") return { id: crypto.randomUUID(), title: g, tasksDone: 0 };
-                let migratedParentIds = g.parentGoalIds;
-                if (!migratedParentIds && g.parentGoalId) {
-                  migratedParentIds = [g.parentGoalId];
-                }
-                return { id: g.id || crypto.randomUUID(), title: g.title, tasksDone: g.tasksDone || 0, parentGoalIds: migratedParentIds };
-              })
-            };
-          });
-          setGoalHorizonsState(repaired);
-        } else {
-          const savedGoalsV1 = window.localStorage.getItem("mizan-goals-v1");
-          if (savedGoalsV1) {
-            const parsedV1 = JSON.parse(savedGoalsV1) as { label: string; targetDate?: string; progress: number; goals: string[] }[];
-            setGoalHorizonsState(parsedV1.map((h: any) => {
-              let startDate = cairoDateKey(new Date());
-              let targetDate = h.targetDate;
-              if (!targetDate) {
-                const now = new Date();
-                if (h.label === "Next 30 days") { startDate = cairoDateAddDays(now, -12); targetDate = cairoDateAddDays(now, 18); }
-                else if (h.label === "Next 3 months") { startDate = cairoDateAddDays(now, -25); targetDate = cairoDateAddDays(now, 65); }
-                else if (h.label === "One year") { startDate = cairoDateAddDays(now, -51); targetDate = cairoDateAddDays(now, 314); }
-                else if (h.label === "Five years") { startDate = cairoDateAddDays(now, -91); targetDate = cairoDateAddDays(now, 1734); }
-              }
-              return {
-                ...h,
-                startDate,
-                targetDate,
-                goals: h.goals.map((g: any) => ({ id: crypto.randomUUID(), title: g, tasksDone: 0 }))
-              };
-            }));
-          } else {
-            setGoalHorizonsState(getInitialGoals());
+        if (data.tasks) {
+          const mapTasks = (tasks: any[]) => tasks.map(t => ({ ...t, id: t._id, linkedGoalIds: t.goalIds }));
+          setTasks(mapTasks(data.tasks.today || []));
+          setTomorrowTasks(mapTasks(data.tasks.tomorrow || []));
+        }
+        if (data.dailyLog) {
+          if (data.dailyLog.mode) setMode(data.dailyLog.mode);
+          if (data.dailyLog.checkIn) setCheckIn(data.dailyLog.checkIn);
+          if (data.dailyLog.challenge) setChallenge(data.dailyLog.challenge);
+          if (typeof data.dailyLog.challengeDone === "boolean") setChallengeDone(data.dailyLog.challengeDone);
+          if (typeof data.dailyLog.quranDone === "boolean") setQuranDone(data.dailyLog.quranDone);
+          if (typeof data.dailyLog.highestTierDone === "number") setHighestTierDone(data.dailyLog.highestTierDone);
+        }
+        const backendPrayers = data.dailyLog?.prayers || data.prayers;
+        if (backendPrayers) setPrayers(backendPrayers);
+        if (data.pastTasks) setPastTasks(data.pastTasks);
+        if (data.weeklyLogs) setWeeklyLogs(data.weeklyLogs);
+        if (data.drafts) {
+          if (data.drafts.planner) setBrainDump(data.drafts.planner);
+          if (data.drafts.coach) setCoachInput(data.drafts.coach);
+        }
+        if (data.reps) {
+          setReps(data.reps);
+          if (!data.dailyLog.challenge && data.reps.length > 0) {
+            setChallenge(data.reps[0].text);
           }
         }
-      } catch {
-        setGoalHorizonsState(getInitialGoals());
+        setHydrated(true);
       }
-      
-      // Phase 3: Hydrate drafts
-      try {
-        const dPlanner = window.localStorage.getItem("mizan-draft-planner");
-        if (dPlanner) setBrainDump(dPlanner);
-        const dCoach = window.localStorage.getItem("mizan-draft-coach");
-        if (dCoach) setCoachInput(dCoach);
-      } catch {
-        // ignore
-      }
-
+    } catch (err) {
+      console.error("Failed to sync from backend", err);
+      setDataNotice("Mizan could not reach the backend. Operating in offline mode.");
+    } finally {
       setHydrated(true);
-    }, 0);
-    return () => window.clearTimeout(loadTimer);
+    }
+  };
+
+  useEffect(() => {
+    fetchSync();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [todayKey]);
+  }, []);
 
-  useEffect(() => {
-    if (!hydrated) return;
-    window.localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify({
-        schemaVersion: SCHEMA_VERSION,
-        dateKey: todayKey,
-        mode,
-        tasks,
-        tomorrowTasks,
-        prayers,
-        checkIn,
-        challenge,
-        challengeDone,
-        quranDone,
-        highestTierDone,
-        contextNotes,
-        pastTasks,
-      }),
-    );
-  }, [hydrated, todayKey, mode, tasks, tomorrowTasks, prayers, checkIn, challenge, challengeDone, quranDone, highestTierDone, contextNotes, pastTasks]);
 
-  useEffect(() => {
-    if (!hydrated) return;
-    window.localStorage.setItem("mizan-goals-v2", JSON.stringify(goalHorizonsState));
-  }, [hydrated, goalHorizonsState]);
 
   // Phase 3: when hydration reveals any task that has hit the 4-roll cap,
   // open the reconsideration modal once. We do not auto-delete or auto-reset
@@ -719,9 +609,9 @@ export function MizanDashboard() {
     if (!hydrated) return;
     const timer = window.setTimeout(() => {
       if (brainDump.trim()) {
-        window.localStorage.setItem("mizan-draft-planner", brainDump);
+        /* draft sync handled by API or skip */
       } else {
-        window.localStorage.removeItem("mizan-draft-planner");
+        /* remove draft */
       }
     }, 500);
     return () => window.clearTimeout(timer);
@@ -731,9 +621,9 @@ export function MizanDashboard() {
     if (!hydrated) return;
     const timer = window.setTimeout(() => {
       if (coachInput.trim()) {
-        window.localStorage.setItem("mizan-draft-coach", coachInput);
+        /* draft sync handled by API or skip */
       } else {
-        window.localStorage.removeItem("mizan-draft-coach");
+        /* remove draft */
       }
     }, 500);
     return () => window.clearTimeout(timer);
@@ -764,22 +654,143 @@ export function MizanDashboard() {
     }
   }, [hydrated, todayKey, loadedDay, tomorrowTasks, cairoNow]);
 
-  function resetRollover(id: number) {
+  function resetRollover(id: string) {
     setTasks((current) => current.map((task) => (task.id === id ? { ...task, rolled: 0 } : task)));
   }
 
-  function dropTask(id: number) {
+  function dropTask(id: string) {
     setTasks((current) => current.filter((task) => task.id !== id));
   }
 
-  function updateTask(id: number, patch: Partial<Task>) {
-    setTasks((current) => current.map((task) => (task.id === id ? { ...task, ...patch } : task)));
+  function addTask(patch: Partial<Task>) {
+    const id = Date.now().toString();
+    const newTask: Task = {
+      id,
+      done: false,
+      rolled: 0,
+      title: patch.title!,
+      category: patch.category as Category,
+      range: patch.range || "Flexible",
+      minutes: patch.minutes || 60,
+      kind: patch.kind as "mission" | "support",
+      details: patch.details,
+      linkedGoalIds: patch.linkedGoalIds
+    };
+    setTasks(current => [...current, newTask]);
     setEditingTaskId(null);
+    fetch(`${API_BASE_URL}/api/tasks`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...newTask, dateKey: todayKey })
+    })
+    .then(res => {
+      if (!res.ok) throw new Error("Failed to add task");
+      return res.json();
+    })
+    .then(data => {
+      setTasks(current => current.map(t => t.id === id ? { ...t, id: data._id } : t));
+    })
+    .catch(err => {
+      console.error(err);
+      setTasks(current => current.filter(t => t.id !== id));
+      setToast("Network error. Changes reverted.");
+    });
   }
 
-  function updateTomorrowTask(id: number, patch: Partial<Task>) {
+  function addTomorrowTask(patch: Partial<Task>) {
+    const id = Date.now().toString();
+    const newTask: Task = {
+      id,
+      done: false,
+      rolled: 0,
+      title: patch.title!,
+      category: patch.category as Category,
+      range: patch.range || "Flexible",
+      minutes: patch.minutes || 60,
+      kind: patch.kind as "mission" | "support",
+      details: patch.details,
+      linkedGoalIds: patch.linkedGoalIds
+    };
+    setTomorrowTasks(current => [...current, newTask]);
+    setEditingTomorrowId(null);
+    fetch(`${API_BASE_URL}/api/tasks`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...newTask, dateKey: tomorrowKey })
+    })
+    .then(res => {
+      if (!res.ok) throw new Error("Failed to add tomorrow task");
+      return res.json();
+    })
+    .then(data => {
+      setTomorrowTasks(current => current.map(t => t.id === id ? { ...t, id: data._id } : t));
+    })
+    .catch(err => {
+      console.error(err);
+      setTomorrowTasks(current => current.filter(t => t.id !== id));
+      setToast("Network error. Changes reverted.");
+    });
+  }
+
+  function updateTask(id: string, patch: Partial<Task>) {
+    const previousTask = tasks.find(t => t.id === id);
+    setTasks((current) => current.map((task) => (task.id === id ? { ...task, ...patch } : task)));
+    setEditingTaskId(null);
+    fetch(`${API_BASE_URL}/api/tasks/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(patch)
+    })
+    .then(res => {
+      if (!res.ok) throw new Error("Failed to update task");
+    })
+    .catch(err => {
+      console.error(err);
+      if (previousTask) {
+        setTasks((current) => current.map((task) => (task.id === id ? previousTask : task)));
+      }
+      setToast("Network error. Changes reverted.");
+    });
+  }
+
+  function deleteTask(id: string) {
+    const previousTask = tasks.find(t => t.id === id);
+    setTasks((current) => current.filter((task) => task.id !== id));
+    setEditingTaskId(null);
+    fetch(`${API_BASE_URL}/api/tasks/${id}`, {
+      method: "DELETE"
+    })
+    .then(res => {
+      if (!res.ok) throw new Error("Failed to delete task");
+    })
+    .catch(err => {
+      console.error(err);
+      if (previousTask) {
+        setTasks((current) => [...current, previousTask].sort((a,b) => (a.position || 0) - (b.position || 0)));
+      }
+      setToast("Network error. Changes reverted.");
+    });
+  }
+
+  function updateTomorrowTask(id: string, patch: Partial<Task>) {
+    const previousTask = tomorrowTasks.find(t => t.id === id);
     setTomorrowTasks((current) => current.map((task) => (task.id === id ? { ...task, ...patch } : task)));
     setEditingTomorrowId(null);
+    fetch(`${API_BASE_URL}/api/tasks/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(patch)
+    })
+    .then(res => {
+      if (!res.ok) throw new Error("Failed to update tomorrow task");
+    })
+    .catch(err => {
+      console.error(err);
+      if (previousTask) {
+        setTomorrowTasks((current) => current.map((task) => (task.id === id ? previousTask : task)));
+      }
+      setToast("Network error. Changes reverted.");
+    });
   }
 
   function updateDraftTask(index: number, patch: Partial<DraftTask>) {
@@ -788,22 +799,68 @@ export function MizanDashboard() {
   }
 
   function updateHorizon(index: number, patch: Partial<Horizon>) {
-    setGoalHorizonsState((current) => current.map((h, i) => (i === index ? { ...h, ...patch } : h)));
+    setGoalHorizonsState((current) => {
+      const h = current[index];
+      if (h && h.id && Object.keys(patch).length > 0) {
+        apiPatch(`${API_BASE_URL}/api/horizons/${h.id}`, patch);
+      }
+      return current.map((horiz, i) => (i === index ? { ...horiz, ...patch } : horiz));
+    });
   }
 
   function addGoalToHorizon(index: number, goal: Goal) {
     if (!goal.title.trim()) return;
-    setGoalHorizonsState((current) =>
-      current.map((h, i) => (i === index ? { ...h, goals: [...h.goals, goal] } : h))
-    );
+    setGoalHorizonsState((current) => {
+      const h = current[index];
+      if (h && h.id) {
+        fetch(`${API_BASE_URL}/api/goals`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title: goal.title, horizonId: h.id })
+        }).then(r => r.json()).then(data => {
+          if (data.goal) {
+            setGoalHorizonsState(curr => curr.map((ch, i) => {
+              if (i === index) {
+                return { ...ch, goals: ch.goals.map(g => g.id === goal.id ? { ...g, id: data.goal._id } : g) };
+              }
+              return ch;
+            }));
+          }
+        }).catch(console.error);
+      }
+      return current.map((horiz, i) => (i === index ? { ...horiz, goals: [...horiz.goals, goal] } : horiz));
+    });
   }
 
   function removeGoalFromHorizon(horizonIndex: number, goalIndex: number) {
-    setGoalHorizonsState((current) =>
-      current.map((h, i) =>
-        i === horizonIndex ? { ...h, goals: h.goals.filter((_, gI) => gI !== goalIndex) } : h
-      )
-    );
+    setGoalHorizonsState((current) => {
+      const h = current[horizonIndex];
+      const g = h.goals[goalIndex];
+      if (g && g.id) {
+        fetch(`${API_BASE_URL}/api/goals/${g.id}`, { method: 'DELETE' }).catch(console.error);
+      }
+      return current.map((horiz, i) =>
+        i === horizonIndex ? { ...horiz, goals: horiz.goals.filter((_, gI) => gI !== goalIndex) } : horiz
+      );
+    });
+  }
+
+  function updateGoal(horizonIndex: number, goalIndex: number, patch: Partial<Goal>) {
+    setGoalHorizonsState((current) => {
+      const h = current[horizonIndex];
+      const g = h.goals[goalIndex];
+      if (g && g.id && Object.keys(patch).length > 0) {
+        apiPatch(`${API_BASE_URL}/api/goals/${g.id}`, patch);
+      }
+      return current.map((horiz, i) => {
+        if (i === horizonIndex) {
+          const newGoals = [...horiz.goals];
+          newGoals[goalIndex] = { ...newGoals[goalIndex], ...patch };
+          return { ...horiz, goals: newGoals };
+        }
+        return horiz;
+      });
+    });
   }
 
   function addContextNote(text: string) {
@@ -850,7 +907,7 @@ export function MizanDashboard() {
     setInsightsPending(true);
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setInsightsError("");
-    fetch("/api/insights", {
+    fetch(`${API_BASE_URL}/api/insights`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ context: buildCoachContext() }),
@@ -908,6 +965,36 @@ export function MizanDashboard() {
     Math.min(100, focusProgress * 0.55 + (prayerProgress / 5) * 35 + (challengeDone ? 10 : 0)),
   );
 
+  // Sync daily score to backend (debounced)
+  useEffect(() => {
+    if (!hydrated) return;
+    const timeout = setTimeout(() => {
+      fetch(`${API_BASE_URL}/api/daily-log/${todayKey}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ score: dailyScore }),
+      }).catch(console.error);
+    }, 1000);
+    return () => clearTimeout(timeout);
+  }, [dailyScore, todayKey, hydrated]);
+
+  const weeklyBars = useMemo(() => {
+    const bars: { value: number; label: string }[] = [];
+    const formatter = new Intl.DateTimeFormat("en-US", { weekday: "short", timeZone: "Africa/Cairo" });
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(cairoNow.getTime() - i * 24 * 60 * 60 * 1000);
+      const key = cairoDateKey(d);
+      const label = formatter.format(d).slice(0, 2);
+      if (i === 0) {
+        bars.push({ value: dailyScore, label });
+      } else {
+        const log = weeklyLogs.find((l: any) => l._id === key);
+        bars.push({ value: log?.score || 0, label });
+      }
+    }
+    return bars;
+  }, [cairoNow, weeklyLogs, dailyScore]);
+
   const visibleTasks = useMemo(() => {
     if (mode === "vacation") return [];
     if (mode === "recovery") {
@@ -921,58 +1008,42 @@ export function MizanDashboard() {
   const completedTaskCount = visibleTasks.filter((task) => task.done).length;
   const remainingFocusMinutes = Math.max(0, 240 - focusMinutes);
 
-  function toggleTask(id: number) {
-    let linkedGoalIdsToUpdate: string[] = [];
-    let willBeDone = false;
+  async function toggleTask(id: string) {
+    const task = tasks.find(t => t.id === id);
+    if (!task) return;
+    const willBeDone = !task.done;
 
     setTasks((current) =>
-      current.map((task) => {
-        if (task.id === id) {
-          linkedGoalIdsToUpdate = task.linkedGoalIds || [];
-          willBeDone = !task.done;
-          return { ...task, done: willBeDone };
+      current.map((t) => {
+        if (t.id === id) {
+          return { ...t, done: willBeDone };
         }
-        return task;
+        return t;
       })
     );
     if (activeTaskId === id) setActiveTaskId(null);
 
-    if (linkedGoalIdsToUpdate.length > 0) {
-      setGoalHorizonsState((current) => {
-        const parentMap: Record<string, string[]> = {};
-        for (const horizon of current) {
-          for (const goal of horizon.goals) {
-            if (goal.parentGoalIds && goal.parentGoalIds.length > 0) {
-              parentMap[goal.id] = goal.parentGoalIds;
-            }
+    // Call backend to update
+    fetch(`${API_BASE_URL}/api/tasks/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ done: willBeDone })
+    })
+    .then(res => {
+      if (!res.ok) throw new Error("Failed to toggle task");
+    })
+    .catch(err => {
+      console.error(err);
+      setTasks((current) =>
+        current.map((task) => {
+          if (task.id === id) {
+            return { ...task, done: !willBeDone };
           }
-        }
-
-        const idsToUpdate = new Set<string>();
-        const queue = [...linkedGoalIdsToUpdate];
-        
-        while (queue.length > 0) {
-          const currentId = queue.shift()!;
-          if (!idsToUpdate.has(currentId)) {
-            idsToUpdate.add(currentId);
-            const parents = parentMap[currentId];
-            if (parents) {
-              queue.push(...parents);
-            }
-          }
-        }
-
-        return current.map((horizon) => ({
-          ...horizon,
-          goals: horizon.goals.map((goal) => {
-            if (idsToUpdate.has(goal.id)) {
-              return { ...goal, tasksDone: Math.max(0, goal.tasksDone + (willBeDone ? 1 : -1)) };
-            }
-            return goal;
-          }),
-        }));
-      });
-    }
+          return task;
+        })
+      );
+      setToast("Network error. Changes reverted.");
+    });
   }
 
   function startNextMission() {
@@ -985,11 +1056,48 @@ export function MizanDashboard() {
   }
 
   function togglePrayer(name: string) {
-    setPrayers((current) =>
-      current.map((prayer) =>
+    const currentPrayer = prayers.find(p => p.name === name);
+    setPrayers((current) => {
+      const updatedPrayers = current.map((prayer) =>
         prayer.name === name ? { ...prayer, done: !prayer.done } : prayer,
-      ),
-    );
+      );
+      fetch(`${API_BASE_URL}/api/daily-log/${todayKey}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prayers: updatedPrayers.map((p: any) => ({ name: p.name, done: p.done, ...(p._id && { _id: p._id }) })) })
+      })
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to toggle prayer");
+      })
+      .catch(err => {
+        console.error(err);
+        setPrayers((currentInner) => currentInner.map((prayer) =>
+          prayer.name === name && currentPrayer ? { ...prayer, done: currentPrayer.done } : prayer
+        ));
+        setToast("Network error. Changes reverted.");
+      });
+      return updatedPrayers;
+    });
+  }
+
+  function toggleQuran() {
+    setQuranDone((current) => {
+      const next = !current;
+      fetch(`${API_BASE_URL}/api/daily-log/${todayKey}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ quranDone: next })
+      })
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to toggle quran");
+      })
+      .catch(err => {
+        console.error(err);
+        setQuranDone(!next);
+        setToast("Network error. Changes reverted.");
+      });
+      return next;
+    });
   }
 
   function chooseMode(next: DayMode) {
@@ -1042,7 +1150,7 @@ export function MizanDashboard() {
     }
     
     try {
-      const response = await fetch("/api/arrange", {
+      const response = await fetch(`${API_BASE_URL}/api/arrange`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ brainDump, context: buildCoachContext() }),
@@ -1085,19 +1193,46 @@ export function MizanDashboard() {
     setArrangeError(errorMessage ?? "Arranged using offline algorithm.");
   }
 
-  function approvePlan() {
+  async function approvePlan() {
     if (!draftTasks.length) return;
-    setTomorrowTasks(
-      draftTasks.map((task, index) => ({
-        ...task,
-        id: Date.now() + index,
-        done: false,
-        rolled: 0,
-      })),
-    );
+    const previousTomorrowTasks = [...tomorrowTasks];
+    try {
+      const savedTasks = await Promise.all(
+        draftTasks.map(async (task, index) => {
+          const newTask = {
+            title: task.title,
+            category: task.category,
+            range: task.range || "Flexible",
+            minutes: task.minutes || 60,
+            kind: task.kind,
+            details: task.details,
+            goalIds: task.linkedGoalIds || [],
+            dateKey: tomorrowKey,
+            position: index,
+            done: false,
+            rolled: 0
+          };
+          const res = await fetch(`${API_BASE_URL}/api/tasks`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(newTask)
+          });
+          if (!res.ok) throw new Error("Failed to save task");
+          const saved = await res.json();
+          return { ...newTask, id: saved._id, linkedGoalIds: saved.goalIds };
+        })
+      );
+      setTomorrowTasks(savedTasks as any[]);
+    } catch (err) {
+      console.error("Failed to approve plan to backend:", err);
+      // Fallback to local if backend fails? Let's just alert
+      setTomorrowTasks(previousTomorrowTasks);
+      setToast("Failed to save plan to server. Changes reverted.");
+      return;
+    }
     setDraftTasks([]);
     setBrainDump("");
-    window.localStorage.removeItem("mizan-draft-planner");
+    /* remove draft */
     setArrangeReasoning("");
     setArrangeFallback(false);
     setArrangeError("");
@@ -1108,8 +1243,22 @@ export function MizanDashboard() {
     setToast("Tomorrow is arranged. Review or remove items below.");
   }
 
-  function removeTomorrowTask(id: number) {
+  function removeTomorrowTask(id: string) {
+    const previousTask = tomorrowTasks.find(t => t.id === id);
     setTomorrowTasks((current) => current.filter((task) => task.id !== id));
+    fetch(`${API_BASE_URL}/api/tasks/${id}`, {
+      method: "DELETE"
+    })
+    .then(res => {
+      if (!res.ok) throw new Error("Failed to remove task");
+    })
+    .catch(err => {
+      console.error(err);
+      if (previousTask) {
+        setTomorrowTasks((current) => [...current, previousTask].sort((a,b) => (a.position || 0) - (b.position || 0)));
+      }
+      setToast("Network error. Changes reverted.");
+    });
   }
 
   function scrapTomorrowPlan() {
@@ -1136,7 +1285,7 @@ export function MizanDashboard() {
     setStuckMessage("");
     setStuckFallback(false);
     try {
-      const response = await fetch("/api/coach", {
+      const response = await fetch(`${API_BASE_URL}/api/coach`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -1149,7 +1298,7 @@ export function MizanDashboard() {
       if (!response.ok || !data.reply) {
         throw new Error(data.error ?? `Coach stuck failed (${response.status})`);
       }
-      setStuckMessage(data.reply.trim());
+      setStuckMessage(data.reply?.trim() ?? "");
     } catch (err) {
       // Visible fallback: keep the planner usable offline, but say so.
       setStuckFallback(true);
@@ -1161,35 +1310,68 @@ export function MizanDashboard() {
   }
 
   function drawChallenge() {
-    // Escalation rule (audit fix): the old drawChallenge picked uniformly from
-    // the full array, so the user could stall on tier-0 reps forever. Now we
-    // bias the next pick toward the next uncompleted tier. 70% chance we draw
-    // from the target tier, 30% we draw from any tier (keeps variety).
-    const currentTier = personalityChallenges.find((c) => c.text === challenge)?.tier ?? 0;
+    const activeReps = reps.filter(r => r.active);
+    if (activeReps.length === 0) return;
+
+    const currentTier = activeReps.find((c) => c.text === challenge)?.tier ?? 0;
     const targetTier = Math.min(2, Math.max(currentTier, highestTierDone) + 1) as 0 | 1 | 2;
 
     const poolFromTier = (tier: 0 | 1 | 2) =>
-      personalityChallenges.filter((c) => c.tier === tier && c.text !== challenge);
+      activeReps.filter((c) => c.tier === tier && c.text !== challenge);
 
     const useTarget = Math.random() < 0.7;
     const candidatePool = useTarget && poolFromTier(targetTier).length
       ? poolFromTier(targetTier)
-      : personalityChallenges.filter((c) => c.text !== challenge);
+      : activeReps.filter((c) => c.text !== challenge);
 
     const next = candidatePool[Math.floor(Math.random() * candidatePool.length)]
-      ?? personalityChallenges.find((c) => c.text !== challenge)
-      ?? personalityChallenges[0];
-    setChallenge(next.text);
+      ?? activeReps.find((c) => c.text !== challenge)
+      ?? activeReps[0];
+      
+    if (!next) return;
+
+    const nextText = next.text;
+    setChallenge(nextText);
     setChallengeDone(false);
+    fetch(`${API_BASE_URL}/api/daily-log/${todayKey}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ challenge: nextText, challengeDone: false })
+    }).catch(console.error);
   }
 
   function markChallengeDone() {
+    let newHighest = highestTierDone;
+    const currentRep = reps.find((c) => c.text === challenge);
     if (!challengeDone) {
       // Toggling from "not done" → "done": record tier progress.
-      const tier = personalityChallenges.find((c) => c.text === challenge)?.tier ?? 0;
-      if (tier > highestTierDone) setHighestTierDone(tier);
+      const tier = currentRep?.tier ?? 0;
+      if (tier > highestTierDone) {
+        newHighest = tier;
+        setHighestTierDone(tier);
+      }
     }
-    setChallengeDone((done) => !done);
+    const nextDone = !challengeDone;
+    setChallengeDone(nextDone);
+    fetch(`${API_BASE_URL}/api/daily-log/${todayKey}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ challengeDone: nextDone, highestTierDone: newHighest })
+    }).catch(console.error);
+
+    if (currentRep) {
+      fetch(`${API_BASE_URL}/api/reps/${currentRep._id}/toggle`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: nextDone ? 'complete' : 'uncomplete' })
+      }).then(() => {
+        setReps(current => current.map(r => 
+          r._id === currentRep._id 
+            ? { ...r, completions: Math.max(0, r.completions + (nextDone ? 1 : -1)) }
+            : r
+        ));
+      }).catch(console.error);
+    }
   }
 
   // Local Whisper transcription via transformers.js. See app/_voice/whisper.ts
@@ -1204,70 +1386,92 @@ export function MizanDashboard() {
   //   - unsupported browser → toast, button disabled for that target.
   //   - download fails / transcription fails → toast with the actual reason.
   async function startVoice(target: "planner" | "coach") {
-    // Phase 5: Voice interruptability
-    if (voicePhase === "downloading" || voicePhase === "transcribing") {
-      if (voiceAbortRef.current) voiceAbortRef.current.aborted = true;
+    if (voicePhase === "transcribing") {
       setVoicePhase("idle");
-      setVoiceProgress(0);
       setIsListening(false);
       setVoiceError("");
       return;
     }
 
-    // Already recording → stop and transcribe.
-    if (voiceAbortRef.current) {
-      voiceAbortRef.current.aborted = true;
+    if (isListening && mediaRecorderRef.current) {
+      mediaRecorderRef.current.stop();
+      setIsListening(false);
+      setVoicePhase("transcribing");
       return;
     }
+
     setVoiceError("");
-    setVoicePhase("recording");
-    const abort = { aborted: false };
-    voiceAbortRef.current = abort;
-    setIsListening(true);
-
+    
     try {
-      // Lazy-load so the route bundle stays light. The module memoizes the
-      // pipeline so subsequent calls reuse it.
-      const { transcribe } = await import("./_voice/whisper");
-      const result = await transcribe(abort, {
-        onProgress: ({ progress }) => {
-          setVoicePhase("downloading");
-          setVoiceProgress(progress);
-        },
-      });
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunksRef.current = [];
 
-      // The recording finished — flip to transcribing briefly so the UI
-      // shows the model is working even if download already happened.
-      if (!abort.aborted) setVoicePhase("transcribing");
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
+        }
+      };
 
-      if (!result.ok) {
-        const friendly = humanizeVoiceFailure(result.reason);
-        setVoiceError(friendly);
-        setToast(friendly);
-        return;
-      }
+      mediaRecorder.onstop = async () => {
+        stream.getTracks().forEach(track => track.stop());
+        const audioBlob = new Blob(audioChunksRef.current, { type: "audio/webm" });
+        const formData = new FormData();
+        formData.append("file", audioBlob, "audio.webm");
+        formData.append("model", "whisper-large-v3-turbo");
 
-      const transcript = result.text.trim();
-      if (!transcript) {
-        setToast("I couldn't hear that clearly. Try once more or type it.");
-        return;
-      }
-      if (target === "planner") {
-        setBrainDump((current) => `${current}${current ? "\n" : ""}${transcript}`);
-      } else {
-        setCoachInput((current) => `${current}${current ? " " : ""}${transcript}`);
-      }
+        try {
+          let groqKey = "";
+          try { groqKey = (import.meta as any).env?.VITE_GROQ_API_KEY; } catch {}
+          if (!groqKey) {
+             try { groqKey = process.env.NEXT_PUBLIC_GROQ_API_KEY || ""; } catch {}
+          }
+          if (!groqKey) {
+            throw new Error("Groq API key not found. Please set NEXT_PUBLIC_GROQ_API_KEY.");
+          }
+
+          const response = await fetch("https://api.groq.com/openai/v1/audio/transcriptions", {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${groqKey}`
+            },
+            body: formData
+          });
+
+          if (!response.ok) {
+            throw new Error(`Groq transcription failed (${response.status})`);
+          }
+
+          const data = await response.json();
+          const transcript = data.text?.trim();
+
+          if (!transcript) {
+            setToast("I couldn't hear that clearly. Try once more or type it.");
+            return;
+          }
+
+          if (target === "planner") {
+            setBrainDump((current) => `${current}${current ? "\n" : ""}${transcript}`);
+          } else {
+            setCoachInput((current) => `${current}${current ? " " : ""}${transcript}`);
+          }
+        } catch (err) {
+          const detail = err instanceof Error ? err.message : "Voice note failed.";
+          setVoiceError(detail);
+          setToast(detail);
+        } finally {
+          setVoicePhase("idle");
+          setVoiceProgress(0);
+        }
+      };
+
+      mediaRecorder.start();
+      setVoicePhase("recording");
+      setIsListening(true);
     } catch (err) {
-      const detail = err instanceof Error ? err.message : "Voice note failed.";
-      setVoiceError(detail);
-      setToast(detail);
-    } finally {
-      setIsListening(false);
-      voiceAbortRef.current = null;
-      // Small delay so the "Transcribing…" state is visible for sub-second
-      // runs — otherwise it flashes too fast to read.
-      window.setTimeout(() => setVoicePhase("idle"), 600);
-      setVoiceProgress(0);
+      setVoiceError("Microphone access denied or unavailable.");
+      setToast("Microphone access denied or unavailable.");
     }
   }
 
@@ -1299,8 +1503,7 @@ export function MizanDashboard() {
   }
 
   function voiceStatusLabel(phase: typeof voicePhase, progress: number): string {
-    if (phase === "downloading") return `One-time download (~140MB) — ${Math.round(progress * 100)}%. Cached for next time.`;
-    if (phase === "transcribing") return "Running locally. Nothing leaves this device.";
+    if (phase === "transcribing") return "Transcribing with Groq Whisper API...";
     if (phase === "recording") return "Recording… tap stop when done.";
     if (phase === "error") return "Voice note failed.";
     return "";
@@ -1312,7 +1515,7 @@ export function MizanDashboard() {
     setCoachError("");
     setCoachPending(true);
     try {
-      const response = await fetch("/api/coach", {
+      const response = await fetch(`${API_BASE_URL}/api/coach`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: text, context: buildCoachContext() }),
@@ -1324,10 +1527,10 @@ export function MizanDashboard() {
       setCoachMessages((current) => [
         ...current, 
         { from: "user" as const, text },
-        { from: "coach" as const, text: data.reply }
+        { from: "coach" as const, text: data.reply ?? "" }
       ]);
       setCoachInput("");
-      window.localStorage.removeItem("mizan-draft-coach");
+      /* remove draft */
     } catch (err) {
       const message = err instanceof Error ? err.message : "AI is unavailable right now.";
       setCoachError(message);
@@ -1507,10 +1710,11 @@ export function MizanDashboard() {
                             initialCategory={task.category}
                             initialKind={task.kind}
                             initialDetails={task.details}
-                            initialLinkedGoalId={task.linkedGoalId}
+                            initialLinkedGoalIds={task.linkedGoalIds}
                             goalHorizons={goalHorizonsState}
                             showKind={false}
                             onSave={(patch) => updateTask(task.id, patch)}
+                            onDelete={() => deleteTask(task.id)}
                             onCancel={() => setEditingTaskId(null)}
                           />
                         ) : (
@@ -1534,9 +1738,7 @@ export function MizanDashboard() {
                           goalHorizons={goalHorizonsState}
                           showKind={true}
                           onSave={(patch) => {
-                            const id = Date.now();
-                            setTasks(current => [...current, { id, done: false, rolled: 0, title: patch.title!, category: patch.category as Category, range: patch.range!, minutes: patch.minutes!, kind: patch.kind! as "mission"|"support", details: patch.details, linkedGoalIds: patch.linkedGoalIds }]);
-                            setEditingTaskId(null);
+                            addTask(patch);
                           }}
                           onCancel={() => setEditingTaskId(null)}
                         />
@@ -1562,16 +1764,66 @@ export function MizanDashboard() {
                       </button>
                     ))}
                   </div>
-                  <button className={quranDone ? "quran-dose done" : "quran-dose"} onClick={() => setQuranDone((done) => !done)}><Icon name={quranDone ? "check" : "book"}/><div><strong>{quranDone ? "Quran complete" : "Daily Quran"}</strong><span>10 minutes · after Maghrib</span></div><Icon name="arrow" size={15}/></button>
+                  <button className={quranDone ? "quran-dose done" : "quran-dose"} onClick={toggleQuran}><Icon name={quranDone ? "check" : "book"}/><div ><strong>{quranDone ? "Quran complete" : "Daily Quran"}</strong><span>10 minutes · after Maghrib</span></div><Icon name="arrow" size={15}/></button>
                 </section>
 
                 <section className="panel challenge-panel">
                   <div className="panel-title-row">
                     <div><p className="eyebrow">Personality grind · {highestTierDone + 1}/3</p><h2>Courage rep</h2></div>
                     {!writingChallenge && (
-                      <div style={{ display: 'flex', gap: '4px' }}>
+                      <div style={{ display: 'flex', gap: '4px', position: 'relative' }} onMouseLeave={() => setRepsModalOpen(false)}>
+                        <button className="icon-button" aria-label="View reps list" onClick={() => setRepsModalOpen(!repsModalOpen)}><Icon name="list" size={14}/></button>
                         <button className="icon-button" aria-label="Write your own" onClick={() => { setDraftChallenge(""); setWritingChallenge(true); }}><Icon name="plus" size={14}/></button>
                         <button className="icon-button" aria-label="Draw another challenge" onClick={drawChallenge}><Icon name="spark"/></button>
+                        
+                        {repsModalOpen && (
+                          <div style={{ position: 'absolute', top: 'calc(100% + 8px)', right: 0, zIndex: 50, background: 'var(--surface)', border: '1px solid var(--line)', borderRadius: '12px', padding: '16px', width: '380px', maxHeight: '400px', overflowY: 'auto', boxShadow: '0 10px 40px rgba(0,0,0,0.2)', display: 'flex', flexDirection: 'column', gap: '12px' }} onClick={e => e.stopPropagation()}>
+                            <div style={{ display: 'flex', gap: '8px', alignItems: 'center', background: 'var(--bg)', padding: '12px', borderRadius: '8px', border: '1px solid var(--line)' }}>
+                              <input className="task-edit-field flex-grow" style={{ border: 'none', background: 'transparent', padding: 0 }} placeholder="New rep..." onKeyDown={e => {
+                                if (e.key === 'Enter' && e.currentTarget.value) {
+                                  const text = e.currentTarget.value;
+                                  fetch(`${API_BASE_URL}/api/reps`, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ text, tier: 0, active: true })
+                                  }).then(res => res.json()).then(newRep => setReps(current => [...current, newRep]));
+                                  e.currentTarget.value = "";
+                                }
+                              }} />
+                              <button className="icon-button"><Icon name="plus" size={14} /></button>
+                            </div>
+                            {reps.map(r => (
+                              <div key={r._id} style={{ display: 'flex', gap: '8px', alignItems: 'center', background: 'var(--bg)', padding: '12px', borderRadius: '8px', border: '1px solid var(--line)', opacity: r.active ? 1 : 0.5 }}>
+                                <button className="icon-button" onClick={() => {
+                                  setReps(current => current.map(x => x._id === r._id ? { ...x, active: !x.active } : x));
+                                  fetch(`${API_BASE_URL}/api/reps/${r._id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ active: !r.active }) }).catch(console.error);
+                                }} title={r.active ? "Deactivate" : "Activate"}><Icon name={r.active ? "check" : "close"} size={14}/></button>
+                                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                  <input className="task-edit-field" style={{ border: 'none', background: 'transparent', padding: 0 }} value={r.text} onChange={(e) => {
+                                    setReps(current => current.map(x => x._id === r._id ? { ...x, text: e.target.value } : x));
+                                    fetch(`${API_BASE_URL}/api/reps/${r._id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: e.target.value }) }).catch(console.error);
+                                  }} />
+                                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                    <select className="task-edit-field" style={{ fontSize: '12px', padding: '0 4px', border: 'none', background: 'transparent', color: 'var(--muted)' }} value={r.tier} onChange={(e) => {
+                                      setReps(current => current.map(x => x._id === r._id ? { ...x, tier: Number(e.target.value) } : x));
+                                      fetch(`${API_BASE_URL}/api/reps/${r._id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ tier: Number(e.target.value) }) }).catch(console.error);
+                                    }}>
+                                      <option value={0}>Tier 0</option>
+                                      <option value={1}>Tier 1</option>
+                                      <option value={2}>Tier 2</option>
+                                    </select>
+                                    <span style={{ fontSize: '12px', color: 'var(--muted)' }}>•</span>
+                                    <span style={{ fontSize: '12px', color: 'var(--muted)', fontWeight: 600 }}>🔥 {r.completions} completions</span>
+                                  </div>
+                                </div>
+                                <button className="icon-button" onClick={() => {
+                                  setReps(current => current.filter(x => x._id !== r._id));
+                                  fetch(`${API_BASE_URL}/api/reps/${r._id}`, { method: "DELETE" }).catch(console.error);
+                                }}><Icon name="close" size={14} /></button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
@@ -1579,7 +1831,30 @@ export function MizanDashboard() {
                     <div className="challenge-write">
                       <textarea className="task-edit-field" rows={2} autoFocus value={draftChallenge} onChange={(e) => setDraftChallenge(e.target.value)} placeholder="Write your own courage rep..." style={{ width: "100%", marginBottom: "12px", background: "rgba(255,255,255,0.5)", borderColor: "#d5bda4" }} />
                       <div className="challenge-actions" style={{ marginTop: 0 }}>
-                        <button className="challenge-complete active" onClick={() => { if (draftChallenge.trim()) setChallenge(draftChallenge.trim()); setWritingChallenge(false); }}>Set rep</button>
+                        <button className="challenge-complete active" onClick={() => {
+                          const text = draftChallenge.trim();
+                          if (text) {
+                            setChallenge(text);
+                            setChallengeDone(false);
+                            fetch(`${API_BASE_URL}/api/daily-log/${todayKey}`, {
+                              method: "PATCH",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify({ challenge: text, challengeDone: false })
+                            }).catch(console.error);
+
+                            const existing = reps.find(r => r.text === text);
+                            if (!existing) {
+                              fetch(`${API_BASE_URL}/api/reps`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ text, tier: 0, active: true })
+                              }).then(res => res.json()).then(newRep => {
+                                setReps(current => [...current, newRep]);
+                              });
+                            }
+                          }
+                          setWritingChallenge(false);
+                        }}>Set rep</button>
                         <button className="draw-another-btn" onClick={() => setWritingChallenge(false)}>Cancel</button>
                       </div>
                     </div>
@@ -1623,11 +1898,13 @@ export function MizanDashboard() {
             onUpdateHorizon={updateHorizon}
             onAddGoal={addGoalToHorizon}
             onRemoveGoal={removeGoalFromHorizon}
+            onUpdateGoal={updateGoal}
           />
         )}
         {view === "insights" && (
           <InsightsView
             dailyScore={dailyScore}
+            weeklyBars={weeklyBars}
             insights={insights}
             pending={insightsPending}
             error={insightsError}
@@ -1691,7 +1968,7 @@ export function MizanDashboard() {
               <div className="draft-plan approved-plan" aria-label="Approved plan for tomorrow">
                 <div className="draft-heading"><strong>Tomorrow is set</strong><span>{tomorrowTasks.length} {tomorrowTasks.length === 1 ? "task" : "tasks"}</span></div>
                 {tomorrowTasks.map((task, index) => editingTomorrowId === task.id ? (
-                  <TaskEditor key={task.id} initialTitle={task.title} initialRange={task.range} initialMinutes={task.minutes} initialCategory={task.category} initialKind={task.kind} initialDetails={task.details} initialLinkedGoalIds={task.linkedGoalIds} goalHorizons={goalHorizonsState} showKind={true} onSave={(patch) => updateTomorrowTask(task.id, patch)} onCancel={() => setEditingTomorrowId(null)} />
+                  <TaskEditor key={task.id} initialTitle={task.title} initialRange={task.range} initialMinutes={task.minutes} initialCategory={task.category} initialKind={task.kind} initialDetails={task.details} initialLinkedGoalIds={task.linkedGoalIds} goalHorizons={goalHorizonsState} showKind={true} onSave={(patch) => updateTomorrowTask(task.id, patch)} onDelete={() => removeTomorrowTask(task.id)} onCancel={() => setEditingTomorrowId(null)} />
                 ) : (
                   <div className="draft-row approved-row" key={task.id ?? index}>
                     <span>{String(index + 1).padStart(2,"0")}</span>
@@ -1788,7 +2065,7 @@ function MultiGoalSelect({
             {horizons.map(h => (
               <div key={h.label} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                 <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase' }}>{h.label}</div>
-                {h.goals.map(g => (
+                {(h.goals || []).map(g => (
                   <label key={g.id} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', cursor: 'pointer', color: 'var(--text)' }}>
                     <input 
                       type="checkbox" 
@@ -1804,7 +2081,7 @@ function MultiGoalSelect({
                     {g.title}
                   </label>
                 ))}
-                {h.goals.length === 0 && <div style={{ fontSize: '12px', color: 'var(--muted)', padding: '2px 0' }}>No goals</div>}
+                {(h.goals || []).length === 0 && <div style={{ fontSize: '12px', color: 'var(--muted)', padding: '2px 0' }}>No goals</div>}
               </div>
             ))}
           </div>
@@ -1825,6 +2102,7 @@ function TaskEditor({
   goalHorizons,
   showKind,
   onSave,
+  onDelete,
   onCancel,
 }: {
   initialTitle: string;
@@ -1837,6 +2115,7 @@ function TaskEditor({
   goalHorizons: Horizon[];
   showKind: boolean;
   onSave: (patch: Partial<Task>) => void;
+  onDelete?: () => void;
   onCancel: () => void;
 }) {
   const [title, setTitle] = useState(initialTitle);
@@ -1871,8 +2150,11 @@ function TaskEditor({
       </div>
       <textarea className="task-edit-field" style={{ width: '100%', marginTop: '8px', minHeight: '60px', background: 'transparent' }} value={details} onChange={(e) => setDetails(e.target.value)} placeholder="Optional details or bullet points..." />
       <div className="task-edit-actions">
-        <button onClick={onCancel} className="secondary-action">Cancel</button>
-        <button onClick={() => onSave({ title, range, minutes, category, kind, details: details.trim() || undefined, linkedGoalIds })} className="primary-action">Save</button>
+        {onDelete && <button onClick={onDelete} className="icon-button" style={{color: "var(--danger)"}}><Icon name="close" /></button>}
+        <div style={{display: 'flex', gap: '8px', marginLeft: 'auto'}}>
+          <button onClick={onCancel} className="secondary-action">Cancel</button>
+          <button onClick={() => onSave({ title, range, minutes, category, kind, details: details.trim() || undefined, linkedGoalIds })} className="primary-action">Save</button>
+        </div>
       </div>
     </div>
   );
@@ -1883,13 +2165,15 @@ function GoalsView({
   onBack,
   onUpdateHorizon,
   onAddGoal,
-  onRemoveGoal
+  onRemoveGoal,
+  onUpdateGoal
 }: { 
   horizons: Horizon[];
   onBack: () => void;
   onUpdateHorizon: (index: number, patch: Partial<Horizon>) => void;
   onAddGoal: (index: number, goal: Goal) => void;
   onRemoveGoal: (horizonIndex: number, goalIndex: number) => void;
+  onUpdateGoal: (horizonIndex: number, goalIndex: number, patch: Partial<Goal>) => void;
 }) {
   const [editingHorizonIndex, setEditingHorizonIndex] = useState<number | null>(null);
   const [newGoalText, setNewGoalText] = useState("");
@@ -1913,6 +2197,7 @@ function GoalsView({
   return <div className="page subpage goals-page">
     <div className="subpage-heading"><div><p className="eyebrow">Direction over distraction</p><h1>Your goals</h1><p>Today only matters because it belongs to something larger.</p></div><button className="secondary-action" onClick={onBack}>Return to today</button></div>
     <section className="goal-hero"><div><p className="eyebrow">The biggest goal</p><h2>Build extraordinary wealth.<br/>Stay healthy. Stay close to God.</h2><p>The number is not the identity. The identity is becoming capable of creating vast value without sacrificing the foundations that make the success worth having.</p></div><div className="goal-hero-number"><span>North star</span><strong>$1B+</strong><small>Net worth · long horizon</small></div></section>
+
     <div className="horizon-grid">
       {horizons.map((horizon, hIndex) => {
         const computedProgress = calculateProgress(horizon);
@@ -1941,13 +2226,11 @@ function GoalsView({
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--muted)' }}>Tracked Goals</label>
                 <ul className="horizon-edit-goals" style={{ margin: 0 }}>
-                  {horizon.goals.map((goal, gIndex) => (
+                  {(horizon.goals || []).map((goal, gIndex) => (
                     <li key={gIndex} className="goal-edit-row" style={{ display: 'flex', flexDirection: 'column', background: 'var(--surface)', padding: '8px', borderRadius: '6px', border: '1px solid var(--line)', gap: '8px', alignItems: 'stretch' }}>
                       <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: '8px' }}>
                         <input className="task-edit-field flex-grow" style={{ border: 'none', background: 'transparent', padding: 0 }} value={goal.title} onChange={(e) => {
-                          const newGoals = [...horizon.goals];
-                          newGoals[gIndex] = { ...goal, title: e.target.value };
-                          onUpdateHorizon(hIndex, { goals: newGoals });
+                          onUpdateGoal(hIndex, gIndex, { title: e.target.value });
                         }} placeholder="Goal title" />
                         <button className="icon-button" style={{ marginLeft: 'auto' }} onClick={() => onRemoveGoal(hIndex, gIndex)}><Icon name="close" /></button>
                       </div>
@@ -1958,17 +2241,13 @@ function GoalsView({
                             horizons={[nextHorizon]}
                             selectedGoalIds={goal.parentGoalIds || []}
                             onChange={(ids) => {
-                              const newGoals = [...horizon.goals];
-                              newGoals[gIndex] = { ...goal, parentGoalIds: ids };
-                              onUpdateHorizon(hIndex, { goals: newGoals });
+                              onUpdateGoal(hIndex, gIndex, { parentGoalIds: ids });
                             }}
                           />
                         )}
                         <span style={{ fontSize: '12px', color: 'var(--muted)', marginLeft: nextHorizon ? '8px' : 'auto' }}>Tasks done:</span>
                         <input className="task-edit-field number-field" type="number" style={{ width: '60px', border: '1px solid var(--line)', padding: '2px 6px' }} value={goal.tasksDone} onChange={(e) => {
-                          const newGoals = [...horizon.goals];
-                          newGoals[gIndex] = { ...goal, tasksDone: Number(e.target.value) || 0 };
-                          onUpdateHorizon(hIndex, { goals: newGoals });
+                          onUpdateGoal(hIndex, gIndex, { tasksDone: Number(e.target.value) || 0 });
                         }} placeholder="0" />
                       </div>
                     </li>
@@ -1990,7 +2269,7 @@ function GoalsView({
                 <strong>{computedProgress}% <button className="icon-button horizon-edit-trigger" onClick={() => setEditingHorizonIndex(hIndex)}><Icon name="spark" /></button></strong>
               </div>
               <div className="horizon-progress"><span style={{width:`${computedProgress}%`}}/></div>
-              <ul className="horizon-goals-list">{horizon.goals.map((goal, gIndex) => (
+              <ul className="horizon-goals-list">{(horizon.goals || []).map((goal, gIndex) => (
                 <li key={gIndex}>
                   <span/>
                   <p>{goal.title}</p>
@@ -2040,12 +2319,14 @@ function HistoryView({ pastTasks, onBack }: { pastTasks: { dateKey: string; task
 
 function InsightsView({
   dailyScore,
+  weeklyBars,
   insights,
   pending,
   error,
   onOpenHistory,
 }: {
   dailyScore: number;
+  weeklyBars: { value: number; label: string }[];
   insights: {
     headline: string;
     stat: string;
@@ -2060,6 +2341,12 @@ function InsightsView({
 }) {
   const insight = insights;
   const loadingText = pending ? "Reading your patterns…" : error ? "Insights unavailable right now." : "Not enough data yet.";
+  
+  const activeBars = weeklyBars.filter(bar => bar.value > 0);
+  const consistencyScore = activeBars.length 
+    ? Math.round(activeBars.reduce((sum, bar) => sum + bar.value, 0) / activeBars.length)
+    : 0;
+
   return <div className="page subpage insights-page">
     <div className="subpage-heading">
       <div><p className="eyebrow">Calm, factual feedback</p><h1>Insights</h1><p>Your behavior is data, not a verdict.</p></div>
@@ -2069,7 +2356,7 @@ function InsightsView({
       </div>
     </div>
     <div className="insight-grid">
-      <section className="panel weekly-chart"><div className="section-heading"><div><p className="eyebrow">Against your best week</p><h2>Consistency score</h2></div><strong>{dailyScore}<small>/100</small></strong></div><div className="chart-area">{weeklyBars.length === 0 ? <div className="chart-empty" role="status"><p>No history yet.</p><small>Complete real work for a few days and this chart fills in from behavior — no fabricated bars.</small></div> : weeklyBars.map((value,index)=><div className="bar-column" key={index}><div className="best-marker" style={{bottom:`${Math.min(94,value+11)}%`}}/><div className="bar" style={{height:`${value}%`}}/><span>{["Th","Fr","Sa","Su","Mo","Tu","We"][index]}</span></div>)}</div><div className="chart-legend"><span><i className="solid"/> This week</span><span><i className="line"/> Best previous week</span></div></section>
+      <section className="panel weekly-chart"><div className="section-heading"><div><p className="eyebrow">Against your best week</p><h2>Consistency score</h2></div><strong>{consistencyScore}<small>/100</small></strong></div><div className="chart-area">{weeklyBars.every(bar => bar.value === 0) ? <div className="chart-empty" role="status"><p>No history yet.</p><small>Complete real work for a few days and this chart fills in from behavior — no fabricated bars.</small></div> : weeklyBars.map((bar,index)=><div className="bar-column" key={index}><div className="best-marker" style={{bottom:`${Math.min(94,bar.value+11)}%`}}/><div className="bar" style={{height:`${bar.value}%`}}/><span>{bar.label}</span></div>)}</div><div className="chart-legend"><span><i className="solid"/> This week</span><span><i className="line"/> Best previous week</span></div></section>
       <section className="panel insight-summary">
         <p className="eyebrow">{insight?.emptyState ? "Not enough data yet" : "What the pattern says"}</p>
         {insight ? (
@@ -2096,8 +2383,7 @@ function InsightsView({
   </div>;
 }
 
-function CoachView({
-  messages,
+function CoachView({ messages, error,
   contextNotes,
   onAddNote,
   onUpdateNote,
@@ -2112,7 +2398,7 @@ function CoachView({
   voiceError,
   pending,
 }: {
-  messages: {from:"coach"|"user";text:string}[];
+  messages: {from:"coach"|"user";text:string}[]; error?: string;
   contextNotes: string[];
   onAddNote: (text: string) => void;
   onUpdateNote: (index: number, text: string) => void;
