@@ -902,12 +902,12 @@ export function MizanDashboard() {
   // localStorage under a dateKey-scoped key so we don't pay for the same
   // commentary twice. The state itself is also stored in React state.
   const insightsCacheKey = `mizan-insights-v2-${todayKey}`;
-  useEffect(() => {
+  const fetchInsights = (force = false) => {
     if (!hydrated) return;
-    if (insights) return; // already loaded this session
+    if (insights && !force) return;
     try {
       const cached = window.localStorage.getItem(insightsCacheKey);
-      if (cached) {
+      if (cached && !force) {
         const parsed = JSON.parse(cached);
         if (!parsed.emptyState && !parsed.fallback) {
           window.setTimeout(() => setInsights(parsed), 0);
@@ -919,10 +919,7 @@ export function MizanDashboard() {
     } catch {
       // ignore malformed cache
     }
-    let cancelled = false;
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setInsightsPending(true);
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setInsightsError("");
     fetch(`${API_BASE_URL}/api/insights`, {
       method: "POST",
@@ -930,16 +927,7 @@ export function MizanDashboard() {
       body: JSON.stringify({ context: buildCoachContext() }),
     })
       .then((r) => r.json())
-      .then((data: {
-        headline?: string;
-        stat?: string;
-        risk?: string;
-        lifeMap?: Array<{ name: string; insight: string }>;
-        emptyState?: boolean;
-        fallback?: boolean;
-        error?: string;
-      }) => {
-        if (cancelled) return;
+      .then((data: any) => {
         if (!data.headline) {
           setInsightsError(data.error ?? "Insights unavailable right now.");
         } else {
@@ -962,15 +950,15 @@ export function MizanDashboard() {
         }
       })
       .catch((err: unknown) => {
-        if (cancelled) return;
         setInsightsError(err instanceof Error ? err.message : "Insights unavailable right now.");
       })
       .finally(() => {
-        if (!cancelled) setInsightsPending(false);
+        setInsightsPending(false);
       });
-    return () => {
-      cancelled = true;
-    };
+  };
+
+  useEffect(() => {
+    fetchInsights();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hydrated, todayKey, insightsCacheKey]);
 
@@ -2361,6 +2349,7 @@ function InsightsView({
   pending,
   error,
   onOpenHistory,
+  onRefresh,
 }: {
   dailyScore: number;
   weeklyBars: { value: number; label: string }[];
@@ -2375,6 +2364,7 @@ function InsightsView({
   pending: boolean;
   error: string;
   onOpenHistory: () => void;
+  onRefresh?: () => void;
 }) {
   const insight = insights;
   const loadingText = pending ? "Reading your patterns…" : error ? "Insights unavailable right now." : "Not enough data yet.";
@@ -2388,6 +2378,11 @@ function InsightsView({
     <div className="subpage-heading">
       <div><p className="eyebrow">Calm, factual feedback</p><h1>Insights</h1><p>Your behavior is data, not a verdict.</p></div>
       <div className="subpage-heading-actions">
+        {onRefresh && (
+          <button className="secondary-action" onClick={onRefresh} disabled={pending}>
+            <Icon name="refresh"/> {pending ? "Refreshing..." : "Refresh Insights"}
+          </button>
+        )}
         <button className="secondary-action" onClick={onOpenHistory}><Icon name="calendar"/> Task history</button>
         <div className="record-chip"><Icon name="flame"/><span>Streak appears once you have real history</span></div>
       </div>
