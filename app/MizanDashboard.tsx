@@ -908,8 +908,13 @@ export function MizanDashboard() {
     try {
       const cached = window.localStorage.getItem(insightsCacheKey);
       if (cached) {
-        window.setTimeout(() => setInsights(JSON.parse(cached)), 0);
-        return;
+        const parsed = JSON.parse(cached);
+        if (!parsed.emptyState && !parsed.fallback) {
+          window.setTimeout(() => setInsights(parsed), 0);
+          return;
+        } else {
+          window.localStorage.removeItem(insightsCacheKey);
+        }
       }
     } catch {
       // ignore malformed cache
@@ -947,10 +952,12 @@ export function MizanDashboard() {
             fallback: data.fallback,
           };
           setInsights(next);
-          try {
-            window.localStorage.setItem(insightsCacheKey, JSON.stringify(next));
-          } catch {
-            // ignore quota errors
+          if (!next.emptyState && !next.fallback) {
+            try {
+              window.localStorage.setItem(insightsCacheKey, JSON.stringify(next));
+            } catch {
+              // ignore quota errors
+            }
           }
         }
       })
