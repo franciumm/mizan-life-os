@@ -417,36 +417,15 @@ function microStepFor(task: Task) {
   return `Take the first visible action for “${task.title}” for five minutes.`;
 }
 
-const pendingApiPatches: Record<string, { url: string, body: any }> = {};
 const apiDebounceTimers: Record<string, any> = {};
-
-function flushApiPatch(url: string) {
-  const req = pendingApiPatches[url];
-  if (!req) return;
-  fetch(req.url, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(req.body)
-  }).catch(console.error);
-  delete pendingApiPatches[url];
-  if (apiDebounceTimers[url]) {
-    clearTimeout(apiDebounceTimers[url]);
-    delete apiDebounceTimers[url];
-  }
-}
-
-export function flushAllApiPatches() {
-  Object.keys(pendingApiPatches).forEach(flushApiPatch);
-}
-
 function apiPatch(url: string, body: any) {
   if (apiDebounceTimers[url]) clearTimeout(apiDebounceTimers[url]);
-  // Merge pending body if one exists for this URL
-  const existingBody = pendingApiPatches[url]?.body || {};
-  pendingApiPatches[url] = { url, body: { ...existingBody, ...body } };
-  
   apiDebounceTimers[url] = setTimeout(() => {
-    flushApiPatch(url);
+    fetch(url, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    }).catch(console.error);
   }, 1000);
 }
 
@@ -1914,6 +1893,21 @@ export function MizanDashboard() {
                   <div className="checkin-control" key={metric}><span>{metric}</span><div>{[1,2,3,4,5].map((value) => <button key={value} className={checkIn[metric] === value ? "active" : ""} aria-label={`${metric} ${value} of 5`} onClick={() => setCheckIn((current) => ({ ...current, [metric]: value }))}>{value}</button>)}</div></div>
                 ))}
               </div>
+              <button 
+                className="primary-action" 
+                style={{ marginTop: '16px', alignSelf: 'flex-start' }} 
+                onClick={() => {
+                  fetch(`${API_BASE_URL}/api/daily-log/${todayKey}`, {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ checkIn })
+                  })
+                  .then(() => setToast("Check-in saved!"))
+                  .catch(console.error);
+                }}
+              >
+                Save Check-In
+              </button>
             </section>
           </div>
         )}
@@ -2286,7 +2280,7 @@ function GoalsView({
                 </ul>
               </div>
               <div style={{ display: 'flex', justifyContent: 'flex-end', paddingTop: '8px' }}>
-                <button className="primary-action" onClick={() => { setEditingHorizonIndex(null); flushAllApiPatches(); }}>Save Changes</button>
+                <button className="primary-action" onClick={() => setEditingHorizonIndex(null)}>Done Editing</button>
               </div>
             </div>
           ) : (
@@ -2304,7 +2298,6 @@ function GoalsView({
                     const newGoals = [...horizon.goals];
                     newGoals[gIndex] = { ...goal, tasksDone: goal.tasksDone + 1 };
                     onUpdateHorizon(hIndex, { goals: newGoals });
-                    flushAllApiPatches();
                   }}><strong>{goal.tasksDone}</strong> tasks</button>
                 </li>
               ))}</ul>
@@ -2457,28 +2450,7 @@ function CoachView({ messages, error,
     setNewNoteText("");
   };
 
-  return <div className="page subpage coach-page"><div className="subpage-heading"><div><p className="eyebrow">Your context, remembered</p><h1>Mizan Coach</h1><p>Strategic when planning. Firm when avoiding. Calm when recovering.</p></div><span className="private-badge"><span/> Private conversation</span></div><section className="coach-shell"><div className="coach-context"><div className="coach-orb"><Icon name="spark" size={24}/></div><h2>I know what you are balancing.</h2><p>Mizan remembers these priorities and uses them to shape every conversation.</p><ul className="context-list editable-list">
-                {contextNotes.map((note, index) => 
-                  <li key={index}>
-                    {editingNoteIndex === index ? 
-                      <div className="note-edit-row">
-                        <input className="task-edit-field flex-grow" value={note} onChange={(e) => onUpdateNote(index, e.target.value)} onBlur={() => { setEditingNoteIndex(null); flushAllApiPatches(); }} autoFocus onKeyDown={(e) => { if (e.key === 'Enter') { setEditingNoteIndex(null); flushAllApiPatches(); } }} />
-                        <button className="icon-button" style={{color: "var(--success)"}} onMouseDown={(e) => { e.preventDefault(); setEditingNoteIndex(null); flushAllApiPatches(); }}><Icon name="check" /></button>
-                        <button className="icon-button" style={{color: "var(--danger)"}} onMouseDown={(e) => { e.preventDefault(); onRemoveNote(index); flushAllApiPatches(); }}><Icon name="close" /></button>
-                      </div> 
-                    : 
-                      <div className="note-display-row" onClick={() => setEditingNoteIndex(index)}>
-                        <span><Icon name="target" /> {note}</span>
-                        <button className="icon-button"><Icon name="spark" size={14}/></button>
-                      </div>
-                    }
-                  </li>
-                )}
-                <li className="note-add-row">
-                  <input className="task-edit-field flex-grow" placeholder="Add something you're balancing..." value={newNoteText} onChange={(e) => setNewNoteText(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') { handleSaveNewNote(); flushAllApiPatches(); } }} />
-                  <button className="icon-button" onClick={() => { handleSaveNewNote(); flushAllApiPatches(); }}><Icon name="plus" /></button>
-                </li>
-              </ul></div><div className="conversation"><div className="messages" aria-live="polite" aria-label="Conversation with Mizan coach">{messages.map((message,index)=><div className={`message ${message.from}`} key={index}>{message.from === "coach" && <span className="message-mark"><Icon name="spark" size={14}/></span>}<p>{message.text}</p></div>)}{pending && <div className="message coach message-pending"><span className="message-mark"><Icon name="spark" size={14}/></span><p>Mizan is thinking…</p></div>}</div><div className="composer"><textarea value={input} onChange={(event)=>setInput(event.target.value)} onKeyDown={(event)=>{if(event.key==="Enter"&&!event.shiftKey){event.preventDefault();send();}}} placeholder="Talk through your plans, uncertainty, pain, or priorities…" rows={2}/><div><button className={voiceActive?`composer-tool listening`:"composer-tool"} onClick={listen}><Icon name={voicePhase==="downloading"||voicePhase==="transcribing"?"spark":listening?"pause":"mic"}/>{voiceLabel}</button><button className="send-button" onClick={send} aria-label="Send message" disabled={pending}><Icon name="send"/></button></div>{voiceActive && <p className="composer-voice-status">{voicePhase === "downloading" ? `One-time download (~140MB) — ${Math.round(voiceProgress * 100)}%. Cached for next time.` : voicePhase === "transcribing" ? "Running locally. Nothing leaves this device." : "Recording… tap stop when done."}</p>}{voiceError && !voiceActive && <p className="composer-voice-error">{voiceError}</p>}</div></div></section></div>;
+  return <div className="page subpage coach-page"><div className="subpage-heading"><div><p className="eyebrow">Your context, remembered</p><h1>Mizan Coach</h1><p>Strategic when planning. Firm when avoiding. Calm when recovering.</p></div><span className="private-badge"><span/> Private conversation</span></div><section className="coach-shell"><div className="coach-context"><div className="coach-orb"><Icon name="spark" size={24}/></div><h2>I know what you are balancing.</h2><p>Mizan remembers these priorities and uses them to shape every conversation.</p><ul className="context-list editable-list">{contextNotes.map((note, index) => <li key={index}>{editingNoteIndex === index ? <div className="note-edit-row"><input className="task-edit-field flex-grow" value={note} onChange={(e) => onUpdateNote(index, e.target.value)} onBlur={() => setEditingNoteIndex(null)} autoFocus onKeyDown={(e) => e.key === 'Enter' && setEditingNoteIndex(null)} /><button className="icon-button" onMouseDown={(e) => { e.preventDefault(); onRemoveNote(index); }}><Icon name="close" /></button></div> : <div className="note-display-row" onClick={() => setEditingNoteIndex(index)}><span><Icon name="target" /> {note}</span><button className="icon-button"><Icon name="spark" size={14}/></button></div>}</li>)}<li className="note-add-row"><input className="task-edit-field flex-grow" placeholder="Add something you're balancing..." value={newNoteText} onChange={(e) => setNewNoteText(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleSaveNewNote()} /><button className="icon-button" onClick={handleSaveNewNote}><Icon name="plus" /></button></li></ul></div><div className="conversation"><div className="messages" aria-live="polite" aria-label="Conversation with Mizan coach">{messages.map((message,index)=><div className={`message ${message.from}`} key={index}>{message.from === "coach" && <span className="message-mark"><Icon name="spark" size={14}/></span>}<p>{message.text}</p></div>)}{pending && <div className="message coach message-pending"><span className="message-mark"><Icon name="spark" size={14}/></span><p>Mizan is thinking…</p></div>}</div><div className="composer"><textarea value={input} onChange={(event)=>setInput(event.target.value)} onKeyDown={(event)=>{if(event.key==="Enter"&&!event.shiftKey){event.preventDefault();send();}}} placeholder="Talk through your plans, uncertainty, pain, or priorities…" rows={2}/><div><button className={voiceActive?`composer-tool listening`:"composer-tool"} onClick={listen}><Icon name={voicePhase==="downloading"||voicePhase==="transcribing"?"spark":listening?"pause":"mic"}/>{voiceLabel}</button><button className="send-button" onClick={send} aria-label="Send message" disabled={pending}><Icon name="send"/></button></div>{voiceActive && <p className="composer-voice-status">{voicePhase === "downloading" ? `One-time download (~140MB) — ${Math.round(voiceProgress * 100)}%. Cached for next time.` : voicePhase === "transcribing" ? "Running locally. Nothing leaves this device." : "Recording… tap stop when done."}</p>}{voiceError && !voiceActive && <p className="composer-voice-error">{voiceError}</p>}</div></div></section></div>;
 }
 
 function LifeMapView({
