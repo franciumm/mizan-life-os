@@ -865,7 +865,9 @@ export function MizanDashboard() {
 
   function addContextNote(text: string) {
     if (!text.trim()) return;
-    setContextNotes((current) => [...current, text.trim()]);
+    const newNotes = [...contextNotes, text.trim()];
+    setContextNotes(newNotes);
+    apiPatch(`${API_BASE_URL}/api/daily-log/${todayKey}`, { contextNotes: newNotes });
   }
 
   function updateContextNote(index: number, text: string) {
@@ -873,11 +875,15 @@ export function MizanDashboard() {
       removeContextNote(index);
       return;
     }
-    setContextNotes((current) => current.map((n, i) => (i === index ? text.trim() : n)));
+    const newNotes = contextNotes.map((n, i) => (i === index ? text.trim() : n));
+    setContextNotes(newNotes);
+    apiPatch(`${API_BASE_URL}/api/daily-log/${todayKey}`, { contextNotes: newNotes });
   }
 
   function removeContextNote(index: number) {
-    setContextNotes((current) => current.filter((_, i) => i !== index));
+    const newNotes = contextNotes.filter((_, i) => i !== index);
+    setContextNotes(newNotes);
+    apiPatch(`${API_BASE_URL}/api/daily-log/${todayKey}`, { contextNotes: newNotes });
   }
 
   useEffect(() => {
