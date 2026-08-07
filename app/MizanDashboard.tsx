@@ -907,30 +907,15 @@ export function MizanDashboard() {
   weekStart.setDate(diff);
   const weekKey = cairoDateKey(weekStart);
   
-  const insightsCacheKey = `mizan-insights-v2-${weekKey}`;
   const fetchInsights = (force = false) => {
     if (!hydrated) return;
     if (insights && !force) return;
-    try {
-      const cached = window.localStorage.getItem(insightsCacheKey);
-      if (cached && !force) {
-        const parsed = JSON.parse(cached);
-        if (!parsed.emptyState && !parsed.fallback) {
-          window.setTimeout(() => setInsights(parsed), 0);
-          return;
-        } else {
-          window.localStorage.removeItem(insightsCacheKey);
-        }
-      }
-    } catch {
-      // ignore malformed cache
-    }
     setInsightsPending(true);
     setInsightsError("");
     fetch(`${API_BASE_URL}/api/insights`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ context: buildCoachContext() }),
+      body: JSON.stringify({ context: buildCoachContext(), weekKey, force }),
     })
       .then((r) => r.json())
       .then((data: any) => {
@@ -939,24 +924,18 @@ export function MizanDashboard() {
         } else {
           const next = {
             headline: data.headline,
-            stat: data.stat ?? "",
-            risk: data.risk ?? "",
-            lifeMap: data.lifeMap ?? [],
+            stat: data.stat,
+            risk: data.risk,
+            lifeMap: data.lifeMap,
             emptyState: data.emptyState,
             fallback: data.fallback,
           };
           setInsights(next);
-          if (!next.emptyState && !next.fallback) {
-            try {
-              window.localStorage.setItem(insightsCacheKey, JSON.stringify(next));
-            } catch {
-              // ignore quota errors
-            }
-          }
         }
       })
-      .catch((err: unknown) => {
-        setInsightsError(err instanceof Error ? err.message : "Insights unavailable right now.");
+      .catch((err) => {
+        console.error("Insights error:", err);
+        setInsightsError("Failed to connect to insight engine.");
       })
       .finally(() => {
         setInsightsPending(false);
@@ -966,7 +945,7 @@ export function MizanDashboard() {
   useEffect(() => {
     fetchInsights();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hydrated, weekKey, insightsCacheKey]);
+  }, [hydrated, weekKey]);
 
   const focusMinutes = useMemo(
     () => tasks.filter((task) => task.done).reduce((sum, task) => sum + task.minutes, 0),
