@@ -3277,6 +3277,10 @@ button.cs-title-button:hover { background: transparent; text-decoration: underli
 .los-interrupt > small { display: block; margin-top: 10px; color: var(--muted); }
 .los-safe-actions { display: flex; flex-wrap: wrap; gap: 7px; margin: 16px 0; }
 .los-safe-actions span { padding: 6px 9px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); background: var(--surface); font-size: 12px; }
+.los-choice-actions { display: flex; flex-wrap: wrap; gap: 7px; margin: 16px 0; }
+.los-choice-btn { padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); background: var(--surface); font-size: 12px; cursor: pointer; transition: background 0.15s, color 0.15s, border-color 0.15s; }
+.los-choice-btn:hover { border-color: var(--accent); color: var(--accent); }
+.los-choice-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600; }
 .los-code-grid { grid-template-columns: .7fr .7fr 1.6fr; margin-bottom: 18px; }
 .los-range { display: flex; min-width: 0; flex-direction: column; gap: 8px; color: var(--muted); font-size: 13px; }
 .los-range input { width: 100%; accent-color: var(--primary); }
