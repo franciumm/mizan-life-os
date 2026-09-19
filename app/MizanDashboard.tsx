@@ -1,10 +1,13 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import ContentWorkspace from "./ContentWorkspace";
+import JourneyWorkspace from "./JourneyWorkspace";
+import LifeOSWorkspace from "./LifeOSWorkspace";
 
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://mizan-backend-lyart.vercel.app';
-type View = "today" | "goals" | "insights" | "coach" | "life" | "history";
+type View = "lifeos" | "today" | "goals" | "insights" | "coach" | "life" | "history" | "content" | "journey";
 type DayMode = "grinding" | "recovery" | "vacation";
 type Category =
   | "Business"
@@ -250,7 +253,10 @@ function getCairoPrayerTimes(date = new Date()): Prayer[] {
 }
 
 const navItems: { id: View; label: string; icon: IconName }[] = [
-  { id: "today", label: "Today", icon: "sun" },
+  { id: "lifeos", label: "Life OS", icon: "sun" },
+  { id: "today", label: "Planner", icon: "list" },
+  { id: "content", label: "Content", icon: "spark" },
+  { id: "journey", label: "Journey", icon: "book" },
   { id: "goals", label: "Goals", icon: "target" },
   { id: "insights", label: "Insights", icon: "chart" },
   { id: "coach", label: "Coach", icon: "spark" },
@@ -356,7 +362,8 @@ type IconName =
   | "close"
   | "send"
   | "pause"
-  | "calendar";
+  | "calendar"
+  | "refresh";
 
 function Icon({ name, size = 18 }: { name: IconName; size?: number }) {
   const common = {
@@ -394,6 +401,7 @@ function Icon({ name, size = 18 }: { name: IconName; size?: number }) {
     close: <><path d="m6 6 12 12M18 6 6 18"/></>,
     send: <><path d="m22 2-7 20-4-9-9-4 20-7Z"/><path d="M22 2 11 13"/></>,
     pause: <><path d="M9 5v14M15 5v14"/></>,
+    refresh: <><path d="M20 7v5h-5M4 17v-5h5M6 7a7 7 0 0 1 12-2l2 3M4 16l2 3a7 7 0 0 0 12-2"/></>,
     calendar: <><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></>,
   };
 
@@ -429,8 +437,8 @@ function apiPatch(url: string, body: any) {
   }, 1000);
 }
 
-export function MizanDashboard() {
-  const [view, setView] = useState<View>("today");
+export function MizanDashboard({ initialView = "lifeos" }: { initialView?: View }) {
+  const [view, setView] = useState<View>(initialView);
   const [mode, setMode] = useState<DayMode>("grinding");
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
   const [pastTasks, setPastTasks] = useState<{ dateKey: string; tasks: Task[] }[]>([]);
@@ -1592,15 +1600,17 @@ export function MizanDashboard() {
         <header className="topbar" role="banner">
           <button className="mobile-menu" aria-label="Open menu" onClick={() => setMobileOpen(true)}><Icon name="menu"/></button>
           <div className="date-block"><span>{weekdayLabel}</span><strong>{dateLabel}</strong></div>
-          <div className="mode-switch" aria-label="Day mode">
+          {view !== "lifeos" && <div className="mode-switch" aria-label="Day mode">
             {(["grinding", "recovery", "vacation"] as DayMode[]).map((item) => (
               <button key={item} className={mode === item ? "selected" : ""} onClick={() => chooseMode(item)}>
                 {item === "grinding" ? "Grinding" : item === "recovery" ? "Recovery" : "Vacation"}
               </button>
             ))}
-          </div>
-          <button className="plan-button" aria-label={tomorrowTasks.length ? "Tomorrow planned" : "Plan tomorrow"} onClick={() => setPlannerOpen(true)}><Icon name={tomorrowTasks.length ? "check" : "moon"}/><span>{tomorrowTasks.length ? "Tomorrow planned" : "Plan tomorrow"}</span></button>
+          </div>}
+          {view !== "lifeos" && <button className="plan-button" aria-label={tomorrowTasks.length ? "Tomorrow planned" : "Plan tomorrow"} onClick={() => setPlannerOpen(true)}><Icon name={tomorrowTasks.length ? "check" : "moon"}/><span>{tomorrowTasks.length ? "Tomorrow planned" : "Plan tomorrow"}</span></button>}
         </header>
+
+        {view === "lifeos" && <LifeOSWorkspace apiBase={API_BASE_URL} />}
 
         {view === "today" && (
           <div className="page today-page">
@@ -1902,6 +1912,8 @@ export function MizanDashboard() {
           </div>
         )}
 
+        {view === "content" && <ContentWorkspace apiBase={API_BASE_URL} />}
+        {view === "journey" && <JourneyWorkspace apiBase={API_BASE_URL} />}
         {view === "goals" && (
           <GoalsView 
             horizons={goalHorizonsState} 
@@ -1950,12 +1962,12 @@ export function MizanDashboard() {
         )}
         {view === "life" && <LifeMapView insights={insights} pending={insightsPending} error={insightsError}/>}
         <footer className="app-footer" aria-label="About this workspace">
-          <p>Mizan is a private life operating system. Nothing leaves this device unless you explicitly call the AI coach or arranger.</p>
+          <p>Your plans, content, journey, and Life OS records use your Mizan backend. Life OS keeps a browser copy only for offline recovery.</p>
         </footer>
       </main>
 
       <nav className="mobile-nav" aria-label="Mobile navigation">
-        {navItems.map((item) => <button key={item.id} className={view === item.id ? "active" : ""} onClick={() => setView(item.id)}><Icon name={item.icon}/><span>{item.label === "Life map" ? "Life" : item.label}</span></button>)}
+        {navItems.filter((item) => ["lifeos", "today", "content", "journey", "insights"].includes(item.id)).map((item) => <button key={item.id} className={view === item.id ? "active" : ""} onClick={() => setView(item.id)}><Icon name={item.icon}/><span>{item.label === "Life map" ? "Life" : item.label}</span></button>)}
       </nav>
 
       {plannerOpen && (

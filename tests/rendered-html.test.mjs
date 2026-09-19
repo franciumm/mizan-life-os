@@ -30,18 +30,19 @@ test("server-renders the Mizan life dashboard", async () => {
 
   const html = await response.text();
   assert.match(html, /<title>Mizan — Your life, in motion<\/title>/i);
-  assert.match(html, /Assalamu alaykum, Mohamed/);
-  assert.match(html, /Your life pulse/);
-  assert.match(html, /Daily missions/);
-  assert.match(html, /Prayer rhythm/);
-  assert.match(html, /The biggest goal/);
-  assert.match(html, /Plan tomorrow/);
+  assert.match(html, /Private operating system/);
+  assert.match(html, />Life OS</);
+  assert.match(html, /What kind of day is today/);
+  assert.match(html, /One win\. Two supports\./);
+  assert.match(html, /Launch HustlIQ/);
+  assert.match(html, /I’m overwhelmed/);
   assert.doesNotMatch(html, /Your site is taking shape|Building your site/);
 });
 
 test("keeps core interactions and responsive navigation in the product surface", async () => {
-  const [dashboard, css, page, layout] = await Promise.all([
+  const [dashboard, lifeOS, css, page, layout] = await Promise.all([
     readFile(new URL("../app/MizanDashboard.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/LifeOSWorkspace.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
@@ -105,18 +106,19 @@ test("keeps core interactions and responsive navigation in the product surface",
   // Phase 6: data integrity. Payload is written with schemaVersion; loading
   // validates shape before React state is touched. Malformed payloads surface
   // a non-alarming notice and start fresh rather than silently swallowing.
-  assert.match(dashboard, /const SCHEMA_VERSION = 1/);
+  assert.match(dashboard, /const SCHEMA_VERSION = 3/);
   assert.match(dashboard, /function validatePayload/);
   assert.match(dashboard, /function isTask\(/);
-  assert.match(dashboard, /setDataNotice\("Mizan could not read your saved workspace/);
+  assert.match(dashboard, /setDataNotice\("Mizan could not reach the backend\. Operating in offline mode\."\)/);
   assert.match(dashboard, /data-notice/);
   // Phase 7: clean state. Seed tasks gone, storage key bumped to v2 so any
   // pre-existing payload with fabricated metrics is dropped, fabricated
-  // sidebar/scores/records replaced with honest empty states.
+  // sidebar/scores/records replaced with real history or honest empty states.
   assert.match(dashboard, /const STORAGE_KEY = "mizan-life-os-v2"/);
   assert.match(dashboard, /const initialTasks: Task\[\] = \[/);
   assert.match(dashboard, /empty by design/);
-  assert.match(dashboard, /const weeklyBars: number\[\] = \[\]/);
+  assert.match(dashboard, /const weeklyBars = useMemo/);
+  assert.match(dashboard, /weeklyLogs\.find/);
   assert.doesNotMatch(dashboard, /Lv\. 18|320 XP to Disciplined|12-day momentum/);
   assert.doesNotMatch(dashboard, /6h 42m|Doomscroll-free/);
   assert.match(dashboard, /status-strip-empty/);
@@ -124,4 +126,28 @@ test("keeps core interactions and responsive navigation in the product surface",
   assert.match(dashboard, /record-grid-empty/);
   assert.match(page, /<MizanDashboard \/>/);
   assert.match(layout, /Instrument_Serif/);
+  // Life OS is the default home and keeps the current task dashboard available
+  // as Planner. Daily requirements are capped at one must-win plus two supports.
+  assert.match(dashboard, /initialView = "lifeos"/);
+  assert.match(dashboard, /label: "Planner"/);
+  assert.match(lifeOS, /supports: \[string, string\]/);
+  assert.match(lifeOS, /What kind of day is today/);
+  assert.match(lifeOS, /Today is a maintenance day\. Low HustlIQ output is expected\./);
+  assert.match(lifeOS, /mizan-life-os-dashboard-v1/);
+  assert.match(lifeOS, /\/api\/life-os/);
+  assert.match(lifeOS, /x-mizan-workspace-key/);
+  assert.match(lifeOS, /crypto\.getRandomValues/);
+  assert.match(lifeOS, /Saving to backend/);
+  assert.match(lifeOS, /calculated by backend/);
+  assert.match(lifeOS, /revision: revisionRef\.current/);
+  assert.match(dashboard, /LifeOSWorkspace apiBase=\{API_BASE_URL\}/);
+  assert.match(dashboard, /browser copy only for offline recovery/);
+  assert.match(lifeOS, /Log an episode · under 30 sec/);
+  assert.match(lifeOS, /One event does not erase the rest of the week/);
+  assert.match(lifeOS, /Where did attention actually go/);
+  assert.match(lifeOS, /50 \* 60 \* 1000/);
+  assert.match(lifeOS, /Change position or safely move for 2–5 minutes/);
+  assert.match(css, /\.los-day-types/);
+  assert.match(css, /\.los-balance-grid/);
+  assert.match(css, /@media \(max-width: 700px\)/);
 });
