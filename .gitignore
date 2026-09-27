@@ -43,3 +43,7 @@ next-env.d.ts
 /outputs/
 /work/
 .gstack/
+tsconfig.tsbuildinfo
+sync_output.json
+test-bars.js
+/test-results/

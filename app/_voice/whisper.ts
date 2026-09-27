@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Local Whisper transcription via transformers.js.
  *

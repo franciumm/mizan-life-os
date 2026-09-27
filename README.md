@@ -120,3 +120,23 @@ Load a small prepaid balance (e.g. $5) in the OpenRouter dashboard and leave aut
 
 - [vinext Documentation](https://github.com/cloudflare/vinext)
 - [Drizzle D1 Guide](https://orm.drizzle.team/docs/get-started/d1-new)
+
+## Content studio
+
+Open `/content` or choose **Content** in the sidebar. Enzo and HustlIQ have separate identity filters over a shared idea bank, pipeline, weekly calendar, editor queue, and results view. The supplied 70 Enzo and 80 HustlIQ concepts initialize as ideas; no footage, publication, or performance is invented. Hooks remain optional and separate from concepts.
+
+Records are persisted by the companion Mizan backend at `/api/content`. Deploy the backend content routes before releasing this frontend. For a local preview against the updated backend, use `NEXT_PUBLIC_API_URL=http://localhost:8788` in an ignored `.env.local`. Production should use the existing deployed API URL, not a localhost build. The initialized records remain in MongoDB across sessions. Failed writes preserve the open form, and revision checks prevent overwriting another session's changes.
+
+The first recording session is planned for September 11, 2026 with 2–3 hours available. Normal days have 1–2 hours. The publishing experiment remains unstarted until its start date is entered. Platform records are manual tracking; the app does not post to social accounts or automatically retrieve metrics.
+
+Validation: `node --experimental-strip-types --test tests/content-data.test.mjs`, `npx tsc --noEmit`, and `npm run build`.
+
+## HustlIQ Journey
+
+Open `/journey` or **Journey** in navigation. Big picture shows the current focus, ordered turning points, open questions, and recorded lessons. Events support optional dates, chapters, expectations, results, evidence links, nested updates, and connections to preceding events. Small changes stay out of the big-picture story; archived events remain searchable with the archive filter.
+
+Playbooks hold detailed procedures, preparation, pitfalls, assumptions, and source events. The three initial procedures are explicitly drafts. Direction review groups events by the founder's own evidence assessment and retains previous review events; it does not infer business success or recommend a pivot automatically. The four initial history events summarize the founder's account; unknown dates, results, and motivation remain blank.
+
+The companion backend must provide `/api/journey` before this frontend is released. Journey has its own Mongo collection; initializing it never changes Content or Today records. Saves reject stale revisions, preserve failed drafts, and allow downloading a draft. Export journey downloads all records as JSON. Evidence attachments are external links; files are not uploaded. Procedures and overview are editable documents, not automatic version archives: record meaningful changes and their reasons as linked events.
+
+Validate with `npx tsc --noEmit --incremental false`, `npm run build`, and backend `npm test -- test/journey.test.js test/content.test.js`. Browser checks must use an isolated store for synthetic records, never production startup history.
